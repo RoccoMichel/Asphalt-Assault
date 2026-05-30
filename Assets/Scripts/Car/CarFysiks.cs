@@ -4,13 +4,13 @@ using UnityEngine;
 public class CarFysiks : MonoBehaviour
 {
     public LayerMask Grownd;
-    public float horspower,stering, grip;
+    public float horspower,bost,stering, grip, springdapening;
     public Transform[] wills;
     Rigidbody rb = new();
     float deltaAcselurashen { get { 
             return Input.GetAxisRaw("Vertical") 
-                * horspower 
-                * Time.deltaTime; } }
+                * (horspower + (Input.GetKey(KeyCode.Space) ? bost : 0)) 
+                * Time.fixedDeltaTime; } }
 
     float rotsensnForse
     {
@@ -18,7 +18,7 @@ public class CarFysiks : MonoBehaviour
         {
             return Input.GetAxisRaw("Horizontal")
                 * stering
-                * Time.deltaTime * rb.linearVelocity.magnitude;
+                * Time.fixedDeltaTime * rb.linearVelocity.magnitude;
         }
     }
 
@@ -29,15 +29,26 @@ public class CarFysiks : MonoBehaviour
             direction = -transform.up,
             origin = orienPos
         };
-
+        float copresen = 0;
         if (Physics.Raycast(spring, out RaycastHit hit, suspesenLegf, Grownd)) {
-            forse = suspesenLegf - Vector3.Distance(orienPos, hit.point);
-            forse *= stifnes;
+            float compression = suspesenLegf - hit.distance;
+
+            float springForce = compression * stifnes;
+
+            float wheelVelocity =
+                Vector3.Dot(
+                    rb.GetPointVelocity(orienPos),
+                    transform.up
+                );
+
+            float dampingForce = wheelVelocity * springdapening;
+
+            forse = springForce - dampingForce;
             Debug.DrawLine(orienPos, hit.point);
         }
 
 
-        return forse * Time.deltaTime;
+        return Mathf.Clamp(forse * Time.fixedDeltaTime, 0, 1000);
     }
     public Vector3 ProdjectVelosetyOnForwordLine() {
         Vector3 line = transform.forward;
@@ -55,14 +66,24 @@ public class CarFysiks : MonoBehaviour
     }
     void Awake() {
         rb = GetComponent<Rigidbody>();
+        rb.centerOfMass = new Vector3(0, -0.5f, 0);
     }
-    void Update() {
+    void FixedUpdate() {
+
         if (GetSuspesenForse(transform.position, 1, 1) != 0) {
             rb.AddForce(transform.forward * deltaAcselurashen);
-            transform.rotation *= Quaternion.Euler(0f, rotsensnForse, 0f);
+            rb.AddTorque(new Vector3(0f, rotsensnForse, 0f));
 
-            //if (1 - getVelosetyAlamentScore() < grip)
-            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, ProdjectVelosetyOnForwordLine(), grip*Time.deltaTime/ rb.linearVelocity.magnitude);
+            Vector3 forwardVel =
+            transform.forward *
+            Vector3.Dot(rb.linearVelocity, transform.forward); 
+            Vector3 sideVel =
+                transform.right *
+                Vector3.Dot(rb.linearVelocity, transform.right);
+
+            rb.linearVelocity =
+                forwardVel +
+                sideVel * (1f - grip * Time.fixedDeltaTime);
         }
 
 
@@ -96,7 +117,7 @@ public class CarFysiks : MonoBehaviour
 
             wills[i++].position = willPos;
 
-            rb.AddForceAtPosition(Vector3.up * GetSuspesenForse(SupsensenPosisen, legf, stifnes), transform.TransformPoint(LocSupsensenPosisen * torkApliskesn));
+            rb.AddForceAtPosition(transform.up * GetSuspesenForse(SupsensenPosisen, legf, stifnes), transform.TransformPoint(LocSupsensenPosisen * torkApliskesn));
         }
     }
 }

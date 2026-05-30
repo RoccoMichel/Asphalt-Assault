@@ -5,17 +5,19 @@ public class CamraControler : MonoBehaviour
     public Rigidbody car;
     public Transform lukeat;
     Vector3 prodjectVecOnXZplabe(Vector3 vec) {
-        return (new Vector3 { 
-            x = vec.x,
-            y = 0,
-            z = vec.z
-        }).normalized;
+        Vector3 vel = new Vector3(
+        car.linearVelocity.x,
+        0,
+        car.linearVelocity.z
+        );
+
+        return vel.magnitude > 1f ? vel.normalized : car.transform.forward;
     }
-    void Update()
+    void LateUpdate()
     {
         Vector3 vel = new Vector3(car.linearVelocity.x, 0, car.linearVelocity.z).normalized;
-        transform.position = Vector3.Lerp(transform.position, car.position - prodjectVecOnXZplabe(vel + car.transform.forward*0.5f) * 8 + Vector3.up*3, Time.deltaTime*50);
-        lukeat.position = Vector3.Lerp(lukeat.position, car.position + prodjectVecOnXZplabe(vel + car.transform.forward * 0.5f), Time.deltaTime * 50);
+        transform.position = Vector3.Lerp(transform.position, car.position - prodjectVecOnXZplabe(vel + car.transform.forward*0.5f) * 5 + Vector3.up*3, Time.deltaTime * 12);
+        lukeat.position = Vector3.Lerp(lukeat.position, car.position + prodjectVecOnXZplabe(vel + car.transform.forward * 0.5f)*4, Time.deltaTime * 12); 
         transform.LookAt(lukeat);
     }
 }
