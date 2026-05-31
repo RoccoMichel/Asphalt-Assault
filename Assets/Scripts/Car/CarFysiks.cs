@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class CarFysiks : MonoBehaviour
 {
+    public bool isGrownded;
     public LayerMask Grownd;
     public float horspower,bost,stering, grip, springdapening;
     public Transform[] wills;
@@ -30,6 +31,7 @@ public class CarFysiks : MonoBehaviour
             origin = orienPos
         };
         float copresen = 0;
+
         if (Physics.Raycast(spring, out RaycastHit hit, suspesenLegf, Grownd)) {
             float compression = suspesenLegf - hit.distance;
 
@@ -69,8 +71,8 @@ public class CarFysiks : MonoBehaviour
         rb.centerOfMass = new Vector3(0, -0.5f, 0);
     }
     void FixedUpdate() {
-
-        if (GetSuspesenForse(transform.position, 1, 1) != 0) {
+        isGrownded = (GetSuspesenForse(transform.position, 1, 1) != 0);
+        if (isGrownded) {
             rb.AddForce(transform.forward * deltaAcselurashen);
             rb.AddTorque(new Vector3(0f, rotsensnForse, 0f));
 

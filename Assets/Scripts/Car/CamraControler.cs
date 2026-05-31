@@ -3,6 +3,7 @@ using UnityEngine;
 public class CamraControler : MonoBehaviour
 {
     public Rigidbody car;
+    public float disToCar;
     public Transform lukeat;
     Camera cam;
     Vector3 prodjectVecOnXZplabe(Vector3 vec) {
@@ -25,5 +26,9 @@ public class CamraControler : MonoBehaviour
         transform.LookAt(lukeat);
 
         cam.fieldOfView = Mathf.Clamp(car.linearVelocity.magnitude*3, 60, 100);
+
+
+        Vector3 dis = car.position - transform.position;
+        transform.position = car.position - dis.normalized * disToCar;
     }
 }
