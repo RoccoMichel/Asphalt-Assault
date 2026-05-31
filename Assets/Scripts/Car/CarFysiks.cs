@@ -11,16 +11,15 @@ public class CarFysiks : MonoBehaviour
     float deltaAcselurashen { get { 
             return Input.GetAxisRaw("Vertical") 
                 * (horspower + (Input.GetKey(KeyCode.Space) ? bost : 0)) 
-                * Time.fixedDeltaTime; } }
+                * Time.fixedDeltaTime; } 
+    }
 
-    float rotsensnForse
-    {
-        get
-        {
+    float rotsensnForse { get {
             return Input.GetAxisRaw("Horizontal")
                 * stering
-                * Time.fixedDeltaTime * rb.linearVelocity.magnitude;
-        }
+                * Time.fixedDeltaTime 
+                * Mathf.Clamp(rb.linearVelocity.magnitude, 0, 10)
+                * grip; }
     }
 
 
@@ -83,9 +82,9 @@ public class CarFysiks : MonoBehaviour
                 transform.right *
                 Vector3.Dot(rb.linearVelocity, transform.right);
 
-            rb.linearVelocity =
-                forwardVel +
-                sideVel * (1f - grip * Time.fixedDeltaTime);
+            if (sideVel.magnitude > grip/2 || Input.GetKeyDown(KeyCode.LeftShift))
+                rb.linearVelocity = forwardVel + sideVel * (1f - grip * Time.fixedDeltaTime);
+            else rb.linearVelocity = forwardVel; 
         }
 
 
