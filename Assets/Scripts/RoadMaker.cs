@@ -7,11 +7,11 @@ using UnityEngine.Splines;
 
 public class RoadMaker : MonoBehaviour
 {
+#if UNITY_EDITOR
+    
     public float roadWidth = 8;
     public int segmentsPerUnit = 2;
     public float maxMiterScale = 3;
-
-    // public float textureScale = 10;
     public float surfaceOffset = 0.02f;
 
     public Texture2D roadTexture;
@@ -215,4 +215,6 @@ public class RoadMaker : MonoBehaviour
         
         Debug.Log("Road mesh saved to " + pathAndName);
     }
+    
+#endif
 }
