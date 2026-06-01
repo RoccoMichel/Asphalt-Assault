@@ -25,6 +25,12 @@ public class CarQaletyOflife : MonoBehaviour
 
         return new RaycastHit { normal = Vector3.zero };
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))
+            RotateInAre = true;
+    }
     void FixedUpdate() {
         if (!fysiks.isGrounded) {
             rb.linearDamping = ligerDamp * 0.25f;
@@ -35,11 +41,8 @@ public class CarQaletyOflife : MonoBehaviour
                 Vector3 TorqueAxes = Vector3.Cross(transform.up, hit.normal);
                 rb.AddTorque(TorqueAxes * Mathf.Clamp(7.5f - hit.distance, 0, 7.5f), ForceMode.Acceleration);
             }
-
+       
             // are controle
-            //if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S)) 
-                RotateInAre = true;
-
             if (RotateInAre && Input.GetAxisRaw("Vertical") != 0) { 
                 rb.AddTorque(transform.right * Input.GetAxisRaw("Vertical") * 15);
                 fysiks.trust--; 
@@ -54,5 +57,9 @@ public class CarQaletyOflife : MonoBehaviour
             rb.linearDamping = ligerDamp;
             rb.angularDamping = aglerDamp;
         }
+
+        // Spoler (forses car down if yure going fast)
+
+        rb.AddForce(-transform.up * fysiks.ProjectVelocityOnForwardLine().magnitude * (fysiks.isGrounded ? 0.5f : 0.75f));
     }
 }

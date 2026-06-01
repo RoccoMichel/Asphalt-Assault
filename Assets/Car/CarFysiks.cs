@@ -10,11 +10,11 @@ public class CarFysiks : MonoBehaviour
     public Transform[] wheels;
     public Slider Slider;
     Rigidbody rb = new();
-    float _trust;
+    float _trust, maxTrost = 500;
     [HideInInspector] public float trust {
         get => _trust;
         set { 
-            _trust = Mathf.Clamp(value, 0, 1000); 
+            _trust = Mathf.Clamp(value, 0, maxTrost); 
             Slider.value = _trust; 
         }
     }
@@ -58,7 +58,7 @@ public class CarFysiks : MonoBehaviour
 
         return Mathf.Clamp(force * Time.fixedDeltaTime, 0, 1000);
     }
-    Vector3 ProjectVelocityOnForwardLine() {
+    public Vector3 ProjectVelocityOnForwardLine() {
         Vector3 line = transform.forward;
         Vector3 vel = rb.linearVelocity;
 
@@ -115,15 +115,17 @@ public class CarFysiks : MonoBehaviour
             transform.right *
             Vector3.Dot(rb.linearVelocity, transform.right);
 
-        if (sideVel.magnitude > grip / 2 || Input.GetKeyDown(KeyCode.LeftShift))
+        if (sideVel.magnitude > grip / 2 || Input.GetKey(KeyCode.LeftShift)) {
             rb.linearVelocity = forwardVel + sideVel * (1f - grip * Time.fixedDeltaTime);
+            trust += sideVel.magnitude * 0.1f;
+        }
         else rb.linearVelocity = forwardVel;
     }
     void AddTrost() {
         rb.AddForce(transform.forward * boost);
     }
     void Awake() {
-        trust = 1000;
+        trust = maxTrost;
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = new Vector3(0, -0.5f, 0);
     }
