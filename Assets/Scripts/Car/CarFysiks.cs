@@ -89,8 +89,8 @@ public class CarFysiks : MonoBehaviour
 
         // Suspension
         float stiffness = 10000;
-        float lenght = 0.3f;
-        float torkAplication = 0.5f;
+        float length = 0.3f;
+        float torqueApplication  = 0.5f;
         int i = 0;
         List<Vector3> wheelPosition = new List<Vector3> {
             new Vector3(0.5f, -0.5f, 0.5f),
@@ -101,23 +101,23 @@ public class CarFysiks : MonoBehaviour
 
         foreach (Vector3 LocalSuspensionPosition in wheelPosition) {
           
-            float willRadios = 0.4f;
+            float wheelRadius = 0.4f;
             Vector3 suspensionPosition = transform.TransformPoint(LocalSuspensionPosition);
 
-            Vector3 willPos = suspensionPosition;
+            Vector3 wheelPos = suspensionPosition;
             Ray spring = new Ray
             {
                 direction = -transform.up,
                 origin = suspensionPosition
             };
 
-            if (Physics.Raycast(spring, out RaycastHit hit, lenght, ground)) {
-                willPos = hit.point + Vector3.up * willRadios;
+            if (Physics.Raycast(spring, out RaycastHit hit, length, ground)) {
+                wheelPos = hit.point + Vector3.up * wheelRadius;
             }
 
-            wheels[i++].position = willPos;
+            wheels[i++].position = wheelPos;
 
-            rb.AddForceAtPosition(transform.up * GetSuspensionForce(suspensionPosition, lenght, stiffness), transform.TransformPoint(LocalSuspensionPosition * torkAplication));
+            rb.AddForceAtPosition(transform.up * GetSuspensionForce(suspensionPosition, length, stiffness), transform.TransformPoint(LocalSuspensionPosition * torqueApplication ));
         }
     }
 }
