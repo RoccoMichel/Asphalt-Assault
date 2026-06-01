@@ -3,63 +3,62 @@ using UnityEngine;
 
 public class CarFysiks : MonoBehaviour
 {
-    public bool isGrownded;
-    public LayerMask Grownd;
-    public float horspower,bost,stering, grip, springdapening;
-    public Transform[] wills;
+    public bool isGrounded;
+    public LayerMask ground;
+    public float horsePower,boost,steering, grip, springDampening;
+    public Transform[] wheels;
     Rigidbody rb = new();
-    float deltaAcselurashen { get { 
+    float deltaAcceleration { get { 
             return Input.GetAxisRaw("Vertical") 
-                * (horspower + (Input.GetKey(KeyCode.Space) ? bost : 0)) 
+                * (horsePower + (Input.GetKey(KeyCode.Space) ? boost : 0)) 
                 * Time.fixedDeltaTime; } 
     }
 
-    float rotsensnForse { get {
+    float rotationForce { get {
             return Input.GetAxisRaw("Horizontal")
-                * stering
+                * steering
                 * Time.fixedDeltaTime 
                 * Mathf.Clamp(rb.linearVelocity.magnitude, 0, 10)
                 * grip; }
     }
 
 
-    public float GetSuspesenForse(Vector3 orienPos, float suspesenLegf, float stifnes) {
-        float forse = 0;
+    public float GetSuspensionForce(Vector3 oreginPos, float suspensionLenght, float stiffness) {
+        float force = 0;
         Ray spring = new Ray { 
             direction = -transform.up,
-            origin = orienPos
+            origin = oreginPos
         };
-        float copresen = 0;
 
-        if (Physics.Raycast(spring, out RaycastHit hit, suspesenLegf, Grownd)) {
-            float compression = suspesenLegf - hit.distance;
+        if (Physics.Raycast(spring, out RaycastHit hit, suspensionLenght, ground)) {
+            float compression = suspensionLenght - hit.distance;
 
-            float springForce = compression * stifnes;
+            float springForce = compression * stiffness;
 
             float wheelVelocity =
                 Vector3.Dot(
-                    rb.GetPointVelocity(orienPos),
+                    rb.GetPointVelocity(oreginPos),
                     transform.up
                 );
 
-            float dampingForce = wheelVelocity * springdapening;
+            float dampingForce = wheelVelocity * springDampening;
 
-            forse = springForce - dampingForce;
-            Debug.DrawLine(orienPos, hit.point);
+            force = springForce - dampingForce;
+            Debug.DrawLine(oreginPos, hit.point);
         }
 
 
-        return Mathf.Clamp(forse * Time.fixedDeltaTime, 0, 1000);
+        return Mathf.Clamp(force * Time.fixedDeltaTime, 0, 1000);
     }
-    public Vector3 ProdjectVelosetyOnForwordLine() {
+    public Vector3 ProjectVelocityOnForwardLine() {
         Vector3 line = transform.forward;
         Vector3 vel = rb.linearVelocity;
 
-        float alanment = getVelosetyAlamentScore();
+        float alignment = getVelocityAlignmentScore();
 
-        return line * alanment * vel.magnitude;
+        return line * alignment * vel.magnitude;
     }
-    public float getVelosetyAlamentScore() {
+    public float getVelocityAlignmentScore() {
         Vector3 line = new Vector3(transform.forward.x, 0, transform.forward.z);
         Vector3 vel = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
 
@@ -70,10 +69,10 @@ public class CarFysiks : MonoBehaviour
         rb.centerOfMass = new Vector3(0, -0.5f, 0);
     }
     void FixedUpdate() {
-        isGrownded = (GetSuspesenForse(transform.position, 1, 1) != 0);
-        if (isGrownded) {
-            rb.AddForce(transform.forward * deltaAcselurashen);
-            rb.AddTorque(new Vector3(0f, rotsensnForse, 0f));
+        isGrounded = (GetSuspensionForce(transform.position, 1, 1) != 0);
+        if (isGrounded) {
+            rb.AddForce(transform.forward * deltaAcceleration);
+            rb.AddTorque(new Vector3(0f, rotationForce, 0f));
 
             Vector3 forwardVel =
             transform.forward *
@@ -88,37 +87,37 @@ public class CarFysiks : MonoBehaviour
         }
 
 
-        // SuspesenSimulasnen
-        float stifnes = 10000;
-        float legf = 0.3f;
-        float torkApliskesn = 0.5f;
+        // Suspension
+        float stiffness = 10000;
+        float lenght = 0.3f;
+        float torkAplication = 0.5f;
         int i = 0;
-        List<Vector3> WillPosisens = new List<Vector3> {
+        List<Vector3> wheelPosition = new List<Vector3> {
             new Vector3(0.5f, -0.5f, 0.5f),
             new Vector3(-0.5f, -0.5f, 0.5f),
             new Vector3(0.5f, -0.5f, -0.5f),
             new Vector3(-0.5f, -0.5f, -0.5f)
         };
 
-        foreach (Vector3 LocSupsensenPosisen in WillPosisens) {
+        foreach (Vector3 LocalSuspensionPosition in wheelPosition) {
           
             float willRadios = 0.4f;
-            Vector3 SupsensenPosisen = transform.TransformPoint(LocSupsensenPosisen);
+            Vector3 suspensionPosition = transform.TransformPoint(LocalSuspensionPosition);
 
-            Vector3 willPos = SupsensenPosisen;
+            Vector3 willPos = suspensionPosition;
             Ray spring = new Ray
             {
                 direction = -transform.up,
-                origin = SupsensenPosisen
+                origin = suspensionPosition
             };
 
-            if (Physics.Raycast(spring, out RaycastHit hit, legf, Grownd)) {
+            if (Physics.Raycast(spring, out RaycastHit hit, lenght, ground)) {
                 willPos = hit.point + Vector3.up * willRadios;
             }
 
-            wills[i++].position = willPos;
+            wheels[i++].position = willPos;
 
-            rb.AddForceAtPosition(transform.up * GetSuspesenForse(SupsensenPosisen, legf, stifnes), transform.TransformPoint(LocSupsensenPosisen * torkApliskesn));
+            rb.AddForceAtPosition(transform.up * GetSuspensionForce(suspensionPosition, lenght, stiffness), transform.TransformPoint(LocalSuspensionPosition * torkAplication));
         }
     }
 }

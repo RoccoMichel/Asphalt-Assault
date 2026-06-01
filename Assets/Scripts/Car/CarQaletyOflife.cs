@@ -19,14 +19,14 @@ public class CarQaletyOflife : MonoBehaviour
             origin = transform.position
         };
 
-        if (Physics.Raycast(ray, out RaycastHit hit, fysiks.Grownd)) { 
+        if (Physics.Raycast(ray, out RaycastHit hit, fysiks.ground)) { 
             return hit;
         }
 
         return new RaycastHit { normal = Vector3.zero };
     }
     void FixedUpdate() {
-        if (!fysiks.isGrownded) {
+        if (!fysiks.isGrounded) {
             rb.linearDamping = ligerDamp * 0.25f;
             rb.angularDamping = aglerDamp * 0.25f;
 

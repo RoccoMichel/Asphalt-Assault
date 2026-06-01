@@ -6,12 +6,10 @@ public class CamraControler : MonoBehaviour
     public float disToCar;
     public Transform lukeat;
     Camera cam;
+
     Vector3 prodjectVecOnXZplabe(Vector3 vec) {
         Vector3 vel = new Vector3(
-        car.linearVelocity.x,
-        0,
-        car.linearVelocity.z
-        );
+        vec.x, 0, vec.z);
 
         return vel.magnitude > 1f ? vel.normalized : car.transform.forward;
     }
@@ -20,15 +18,14 @@ public class CamraControler : MonoBehaviour
     }
     void LateUpdate()
     {
-        Vector3 vel = new Vector3(car.linearVelocity.x, 0, car.linearVelocity.z).normalized;
-        transform.position = Vector3.Lerp(transform.position, car.position - prodjectVecOnXZplabe(vel + car.transform.forward*0.5f) * 5 + Vector3.up*3, Time.deltaTime * 12);
+        Vector3 vel = new Vector3(car.linearVelocity.x, 0, car.linearVelocity.z);
+        transform.position = Vector3.Lerp(transform.position, car.position - prodjectVecOnXZplabe(vel + car.transform.forward*0.5f) * 5 + Vector3.up*2, Time.deltaTime * 12);
         lukeat.position = Vector3.Lerp(lukeat.position, car.position + prodjectVecOnXZplabe(vel + car.transform.forward * 0.5f)*4, Time.deltaTime * 12); 
-        transform.LookAt(lukeat);
-
         cam.fieldOfView = Mathf.Clamp(car.linearVelocity.magnitude*3, 60, 100);
-
-
+        
+        
         Vector3 dis = car.position - transform.position;
-        transform.position = car.position - dis.normalized * disToCar;
+        transform.position = Vector3.Lerp(transform.position, car.position - dis.normalized * disToCar, Time.deltaTime*25);
+        transform.LookAt(lukeat);
     }
 }
