@@ -19,13 +19,14 @@ public class CarFysiks : MonoBehaviour
     };
     float GroundSlipperiness => groundSlipperiness[GrowndType];
 
-    [HideInInspector] public bool isGrounded;
+    [HideInInspector] public bool isGrounded, isSliding = false;
     public LayerMask ground;
     public float horsePower,boost,steering, grip, springDampening;
     public Transform[] wheels;
     public Slider Slider;
-    Rigidbody rb = new();
+    [HideInInspector] public Rigidbody rb = new();
     float _trust, maxTrost = 500;
+    CarEfekts carEfekts;
 
     void FixedUpdate()
     {
@@ -38,10 +39,16 @@ public class CarFysiks : MonoBehaviour
 
             ClampVelosetyToForwordDireksen();
         }
-        else trust++;
+        else { 
+            trust++;
+            carEfekts.SmokePartikals = false;
+        }
 
-        if (Input.GetKey(KeyCode.Space) && trust > 0)
-           AddTrost();
+        if (Input.GetKey(KeyCode.Space) && trust > 0) {
+            AddTrost();
+            carEfekts.FigerPartikals = true;
+        }
+        else carEfekts.FigerPartikals = false;
 
         AplySuspensen();
     }
@@ -151,11 +158,14 @@ public class CarFysiks : MonoBehaviour
             transform.right *
             Vector3.Dot(rb.linearVelocity, transform.right);
 
-        if (sideVel.magnitude > _grip / 2 || Input.GetKey(KeyCode.LeftShift)) {
+        if (sideVel.magnitude > _grip / 2 || Input.GetKey(KeyCode.LeftShift))
+        {
             rb.linearVelocity = forwardVel + sideVel * (1f - _grip * Time.fixedDeltaTime);
             trust += sideVel.magnitude * 0.1f;
+            carEfekts.SmokePartikals = true;
+            isSliding = true;
         }
-        else rb.linearVelocity = forwardVel;
+        else { rb.linearVelocity = forwardVel; isSliding = false; carEfekts.SmokePartikals = false; }
     }
     void AddTrost() {
         rb.AddForce(transform.forward * boost);
@@ -165,6 +175,7 @@ public class CarFysiks : MonoBehaviour
         trust = maxTrost;
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = new Vector3(0, -0.5f, 0);
+        carEfekts = GetComponent<CarEfekts>();
     }
   
 }
