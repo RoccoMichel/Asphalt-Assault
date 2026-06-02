@@ -1,16 +1,50 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static CarFysiks;
 
 public class CarFysiks : MonoBehaviour
 {
-    public bool isGrounded;
+    public enum growndType { 
+        rode,
+        terane,
+        ise
+    }
+    public growndType GrowndType;
+    Dictionary<growndType, float> groundSlipperiness = new()
+    {
+        { growndType.rode, 1.2f },
+        { growndType.terane, 1f },
+        { growndType.ise, 0.25f }
+    };
+    float GroundSlipperiness => groundSlipperiness[GrowndType];
+
+    [HideInInspector] public bool isGrounded;
     public LayerMask ground;
     public float horsePower,boost,steering, grip, springDampening;
     public Transform[] wheels;
     public Slider Slider;
     Rigidbody rb = new();
     float _trust, maxTrost = 500;
+
+    void FixedUpdate()
+    {
+        isGrounded = (GetSuspensionForce(transform.position, 1, 1) != 0);
+
+        if (isGrounded)
+        {
+            rb.AddForce(transform.forward * deltaAcceleration);
+            rb.AddTorque(new Vector3(0f, rotationForce, 0f));
+
+            ClampVelosetyToForwordDireksen();
+        }
+        else trust++;
+
+        if (Input.GetKey(KeyCode.Space) && trust > 0)
+           AddTrost();
+
+        AplySuspensen();
+    }
     [HideInInspector] public float trust {
         get => _trust;
         set { 
@@ -108,6 +142,8 @@ public class CarFysiks : MonoBehaviour
         }
     }
     void ClampVelosetyToForwordDireksen() {
+
+        float _grip = grip * GroundSlipperiness;
         Vector3 forwardVel =
               transform.forward *
               Vector3.Dot(rb.linearVelocity, transform.forward);
@@ -115,37 +151,20 @@ public class CarFysiks : MonoBehaviour
             transform.right *
             Vector3.Dot(rb.linearVelocity, transform.right);
 
-        if (sideVel.magnitude > grip / 2 || Input.GetKey(KeyCode.LeftShift)) {
-            rb.linearVelocity = forwardVel + sideVel * (1f - grip * Time.fixedDeltaTime);
+        if (sideVel.magnitude > _grip / 2 || Input.GetKey(KeyCode.LeftShift)) {
+            rb.linearVelocity = forwardVel + sideVel * (1f - _grip * Time.fixedDeltaTime);
             trust += sideVel.magnitude * 0.1f;
         }
         else rb.linearVelocity = forwardVel;
     }
     void AddTrost() {
         rb.AddForce(transform.forward * boost);
+        trust -= 2;
     }
     void Awake() {
         trust = maxTrost;
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = new Vector3(0, -0.5f, 0);
     }
-    void FixedUpdate() {
-        isGrounded = (GetSuspensionForce(transform.position, 1, 1) != 0);
-
-        if (isGrounded)
-        {
-            rb.AddForce(transform.forward * deltaAcceleration);
-            rb.AddTorque(new Vector3(0f, rotationForce, 0f));
-
-            ClampVelosetyToForwordDireksen();
-        }
-        else trust++;
-
-        if (Input.GetKey(KeyCode.Space) && trust > 0) {
-            trust--;
-            AddTrost();
-        }
-
-        AplySuspensen();
-    }
+  
 }
