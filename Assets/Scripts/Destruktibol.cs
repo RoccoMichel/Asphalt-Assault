@@ -5,8 +5,12 @@ using UnityEngine;
 public class Destruktibol : MonoBehaviour
 {
     public float sturtynes;
-    public List<Rigidbody> rbs = new();
-    public List<Collider> colliders = new();
+    [BoltsComment(@"Fore the code to work
+1) have tow coloder on the obj whan triget on top and whan diaktivated on the botom
+2) Have a partikal sysem on the botom of the child list
+3) Inclod a colider and rb (bofe diaktivated) on evry physisk pise of the ovj")]
+    List<Rigidbody> rbs = new();
+    List<Collider> colliders = new();
     Collider[] col;
     ParticleSystem Destruksen;
 
