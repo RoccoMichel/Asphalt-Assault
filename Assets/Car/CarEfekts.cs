@@ -1,9 +1,13 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class CarEfekts : MonoBehaviour
 {
+    public TextMeshProUGUI text;
+    float km;
     bool smokePartikals = new(), figerPartikals = new();
+    Rigidbody rb;
     [HideInInspector] public bool SmokePartikals { get => smokePartikals; 
         set {
             smokePartikals = value;
@@ -38,6 +42,7 @@ public class CarEfekts : MonoBehaviour
                     smokeParticals[i].Stop();
     }
     private void Awake() {
+        rb = GetComponent<Rigidbody>();
         fysiks = GetComponent<CarFysiks>();
         for (int i = 0; i < fysiks.wheels.Length; i++) {
             if (i > 1) {
@@ -46,5 +51,10 @@ public class CarEfekts : MonoBehaviour
             }
 
         }
+    }
+
+    void Update() {
+        km = Mathf.Round(rb.linearVelocity.magnitude*2);
+        text.text = km + " km/h";
     }
 }

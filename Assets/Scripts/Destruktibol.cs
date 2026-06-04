@@ -1,6 +1,7 @@
 using BoltsTools;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class Destruktibol : MonoBehaviour
 {
@@ -28,7 +29,7 @@ public class Destruktibol : MonoBehaviour
 
     float CulkulateKenetikEnery(Rigidbody rb) {
         Vector3 dir = (transform.position - rb.position).normalized;
-        float vel = Vector3.Dot(rb.linearVelocity.normalized, dir) * rb.linearVelocity.magnitude;
+        float vel = (Vector3.Dot(rb.linearVelocity.normalized, dir)+0.1f) * rb.linearVelocity.magnitude;
 
         return rb.mass * (vel*vel)/2;
     }
