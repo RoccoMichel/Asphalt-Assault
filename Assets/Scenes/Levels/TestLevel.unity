@@ -10321,6 +10321,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 485377448819346224, guid: eafd240c826a2e441812518cb7ae70fd, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 485377448819346224, guid: eafd240c826a2e441812518cb7ae70fd, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 528876014752051027, guid: eafd240c826a2e441812518cb7ae70fd, type: 3}
       propertyPath: m_Name
       value: Player
