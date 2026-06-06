@@ -9,7 +9,7 @@ public class PlayerInputs : MonoBehaviour
         fysiks = GetComponentInChildren<CarFysiks>();
         QaletyOflife = GetComponentInChildren<CarQaletyOflife>();
     }
-    void Update() {
-        
+    void FixedUpdate() {
+        fysiks.PassInInputs(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), Input.GetKey(KeyCode.Space));
     }
 }

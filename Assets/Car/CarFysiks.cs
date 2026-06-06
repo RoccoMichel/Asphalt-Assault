@@ -28,23 +28,24 @@ public class CarFysiks : MonoBehaviour
     float _trust, maxTrost = 500;
     CarEfekts carEfekts;
 
-    void FixedUpdate()
-    {
+    public void PassInInputs(float X, float Y, bool bost) {
         isGrounded = (GetSuspensionForce(transform.position, 1, 1) != 0);
 
         if (isGrounded)
         {
-            rb.AddForce(transform.forward * deltaAcceleration);
-            rb.AddTorque(new Vector3(0f, rotationForce, 0f));
+            rb.AddForce(transform.forward * deltaAcceleration * Y);
+            rb.AddTorque(new Vector3(0f, rotationForce * X, 0f));
 
             ClampVelosetyToForwordDireksen();
         }
-        else { 
+        else
+        {
             trust++;
             carEfekts.SmokePartikals = false;
         }
 
-        if (Input.GetKey(KeyCode.Space) && trust > 0) {
+        if (bost && trust > 0)
+        {
             AddTrost();
             carEfekts.FigerPartikals = true;
         }
@@ -52,6 +53,31 @@ public class CarFysiks : MonoBehaviour
 
         AplySuspensen();
     }
+
+    //void FixedUpdate()
+    //{
+    //    isGrounded = (GetSuspensionForce(transform.position, 1, 1) != 0);
+
+    //    if (isGrounded)
+    //    {
+    //        rb.AddForce(transform.forward * deltaAcceleration);
+    //        rb.AddTorque(new Vector3(0f, rotationForce, 0f));
+
+    //        ClampVelosetyToForwordDireksen();
+    //    }
+    //    else { 
+    //        trust++;
+    //        carEfekts.SmokePartikals = false;
+    //    }
+
+    //    if (Input.GetKey(KeyCode.Space) && trust > 0) {
+    //        AddTrost();
+    //        carEfekts.FigerPartikals = true;
+    //    }
+    //    else carEfekts.FigerPartikals = false;
+
+    //    AplySuspensen();
+    //}
     [HideInInspector] public float trust {
         get => _trust;
         set { 
@@ -60,13 +86,11 @@ public class CarFysiks : MonoBehaviour
         }
     }
     float deltaAcceleration { get { 
-            return Input.GetAxisRaw("Vertical") 
-                * horsePower 
+            return horsePower 
                 * Time.fixedDeltaTime; } 
     }
     float rotationForce { get {
-            return Input.GetAxisRaw("Horizontal")
-                * steering
+            return steering
                 * Time.fixedDeltaTime 
                 * Mathf.Clamp(rb.linearVelocity.magnitude, 0, 10)
                 * grip; }
@@ -169,7 +193,7 @@ public class CarFysiks : MonoBehaviour
     }
     void AddTrost() {
         rb.AddForce(transform.forward * boost);
-        trust -= 2;
+        trust -= 5;
     }
     void Awake() {
         trust = maxTrost;
