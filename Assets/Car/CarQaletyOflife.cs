@@ -12,7 +12,6 @@ public class CarQaletyOflife : MonoBehaviour
         ligerDamp = rb.linearDamping;
         aglerDamp = rb.angularDamping;
     }
-
     RaycastHit getNormolOfPontUnderCar() {
         Ray ray = new Ray { 
             direction = Vector3.down,
@@ -25,39 +24,45 @@ public class CarQaletyOflife : MonoBehaviour
 
         return new RaycastHit { normal = Vector3.zero };
     }
-
-    private void Update()
+    void Update()
     {
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))
             RotateInAre = true;
     }
-    void FixedUpdate() {
-        if (!fysiks.isGrounded) {
+
+    public void PassInInputs(float Y, bool RotateInAre) {
+        if (!fysiks.isGrounded)
+        {
             rb.linearDamping = ligerDamp * 0.25f;
             rb.angularDamping = aglerDamp * 0.25f;
 
             RaycastHit hit = getNormolOfPontUnderCar();
-            if (hit.normal != Vector3.zero) {
+            if (hit.normal != Vector3.zero)
+            {
                 Vector3 TorqueAxes = Vector3.Cross(transform.up, hit.normal);
                 rb.AddTorque(TorqueAxes * Mathf.Clamp(7.5f - hit.distance, 0, 7.5f), ForceMode.Acceleration);
             }
-       
+
             // are controle
-            if (RotateInAre && Input.GetAxisRaw("Vertical") != 0) { 
+            if (RotateInAre && Y != 0)
+            {
                 rb.AddTorque(transform.right * Input.GetAxisRaw("Vertical") * 15);
-                fysiks.trust--; 
+                fysiks.trust--;
             }
             Debug.DrawLine(transform.position, transform.position + transform.up * 100);
-            if (RotateInAre) { 
-                Debug.DrawLine(transform.position, transform.position + transform.forward*100);
+            if (RotateInAre)
+            {
+                Debug.DrawLine(transform.position, transform.position + transform.forward * 100);
             }
         }
-        else {
-            RotateInAre = false;
+        else
+        {
             rb.linearDamping = ligerDamp;
             rb.angularDamping = aglerDamp;
         }
 
+    }
+    void FixedUpdate() {
         // Spoler (forses car down if yure going fast)
 
         rb.AddForce(-transform.up * fysiks.ProjectVelocityOnForwardLine().magnitude * (fysiks.isGrounded ? 0.5f : 0.75f));

@@ -49,7 +49,6 @@ public class CarEfekts : MonoBehaviour
         HitPartikalsLev1.transform.position = pos;
         HitPartikalsLev1.Play();
     }
-
     public void PlayHitParticalsLev2(Vector3 pos, Vector3 norm)
     {
         HitPartikalsLev2.transform.position = pos;
