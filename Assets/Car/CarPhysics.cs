@@ -1,32 +1,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static CarFysiks;
 
-public class CarFysiks : MonoBehaviour
+public class CarPhysics : MonoBehaviour 
 {
-    public enum growndType { 
-        rode,
-        terane,
-        ise
+    public enum groundType { 
+        road,
+        terrain,
+        ice
     }
-    public growndType GrowndType;
-    Dictionary<growndType, float> groundSlipperiness = new()
+    public groundType GroundType;
+    Dictionary<groundType, float> groundSlipperiness = new()
     {
-        { growndType.rode, 1.2f },
-        { growndType.terane, 1f },
-        { growndType.ise, 0.25f }
+        { groundType.road, 1.2f },
+        { groundType.terrain, 1f },
+        { groundType.ice, 0.25f }
     };
-    float GroundSlipperiness => groundSlipperiness[GrowndType];
+    float GroundSlipperiness => groundSlipperiness[GroundType];
 
     [HideInInspector] public bool isGrounded, isSliding = false;
     public LayerMask ground;
     public float horsePower,boost,steering, grip, springDampening;
     public Transform[] wheels;
-    public Slider Slider;
+    public Slider slider;
     [HideInInspector] public Rigidbody rb = new();
-    float _trust, maxTrost = 500;
-    CarEfekts carEfekts;
+    float _thrust, maxThrust = 500;
+    CarEffects carEffects;
 
     public void PassInInputs(float X, float Y, bool bost) {
         isGrounded = (GetSuspensionForce(transform.position, 1, 1) != 0);
@@ -36,22 +35,22 @@ public class CarFysiks : MonoBehaviour
             rb.AddForce(transform.forward * deltaAcceleration * Y);
             rb.AddTorque(new Vector3(0f, rotationForce * X, 0f));
 
-            ClampVelosetyToForwordDireksen();
+            ClampVelocityToForwordDiretion();
         }
         else
         {
-            trust++;
-            carEfekts.SmokePartikals = false;
+            thrust++;
+            carEffects.SmokeParticles = false;
         }
 
-        if (bost && trust > 0)
+        if (bost && thrust > 0)
         {
-            AddTrost();
-            carEfekts.FigerPartikals = true;
+            AddThrust();
+            carEffects.FigerParticles = true;
         }
-        else carEfekts.FigerPartikals = false;
+        else carEffects.FigerParticles = false;
 
-        AplySuspensen();
+        ApplySuspensen();
     }
 
     //void FixedUpdate()
@@ -78,11 +77,11 @@ public class CarFysiks : MonoBehaviour
 
     //    AplySuspensen();
     //}
-    [HideInInspector] public float trust {
-        get => _trust;
+    [HideInInspector] public float thrust {
+        get => _thrust;
         set { 
-            _trust = Mathf.Clamp(value, 0, maxTrost); 
-            Slider.value = _trust; 
+            _thrust = Mathf.Clamp(value, 0, maxThrust); 
+            slider.value = _thrust; 
         }
     }
     float deltaAcceleration { get { 
@@ -96,11 +95,11 @@ public class CarFysiks : MonoBehaviour
                 * grip; }
     }
 
-    float GetSuspensionForce(Vector3 oreginPos, float suspensionLenght, float stiffness) {
+    float GetSuspensionForce(Vector3 originPos, float suspensionLenght, float stiffness) {
         float force = 0;
         Ray spring = new Ray { 
             direction = -transform.up,
-            origin = oreginPos
+            origin = originPos
         };
 
         if (Physics.Raycast(spring, out RaycastHit hit, suspensionLenght, ground)) {
@@ -110,14 +109,14 @@ public class CarFysiks : MonoBehaviour
 
             float wheelVelocity =
                 Vector3.Dot(
-                    rb.GetPointVelocity(oreginPos),
+                    rb.GetPointVelocity(originPos),
                     transform.up
                 );
 
             float dampingForce = wheelVelocity * springDampening;
 
             force = springForce - dampingForce;
-            Debug.DrawLine(oreginPos, hit.point);
+            Debug.DrawLine(originPos, hit.point);
         }
 
 
@@ -137,7 +136,7 @@ public class CarFysiks : MonoBehaviour
 
         return Vector3.Dot(vel.normalized, line);
     }
-    void AplySuspensen() {
+    void ApplySuspensen() {
         float stiffness = 10000;
         float length = 0.3f;
         float torqueApplication = 0.5f;
@@ -172,7 +171,7 @@ public class CarFysiks : MonoBehaviour
             rb.AddForceAtPosition(transform.up * GetSuspensionForce(suspensionPosition, length, stiffness), transform.TransformPoint(LocalSuspensionPosition * torqueApplication));
         }
     }
-    void ClampVelosetyToForwordDireksen() {
+    void ClampVelocityToForwordDiretion() {
 
         float _grip = grip * GroundSlipperiness;
         Vector3 forwardVel =
@@ -185,21 +184,21 @@ public class CarFysiks : MonoBehaviour
         if (sideVel.magnitude > _grip / 2 || Input.GetKey(KeyCode.LeftShift))
         {
             rb.linearVelocity = forwardVel + sideVel * (1f - _grip * Time.fixedDeltaTime);
-            trust += sideVel.magnitude * 0.1f;
-            carEfekts.SmokePartikals = true;
+            thrust += sideVel.magnitude * 0.1f;
+            carEffects.SmokeParticles = true;
             isSliding = true;
         }
-        else { rb.linearVelocity = forwardVel; isSliding = false; carEfekts.SmokePartikals = false; }
+        else { rb.linearVelocity = forwardVel; isSliding = false; carEffects.SmokeParticles = false; }
     }
-    void AddTrost() {
+    void AddThrust() {
         rb.AddForce(transform.forward * boost);
-        trust -= 5;
+        thrust -= 5;
     }
     void Awake() {
-        trust = maxTrost;
+        thrust = maxThrust;
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = new Vector3(0, -0.5f, 0);
-        carEfekts = GetComponent<CarEfekts>();
+        carEffects = GetComponent<CarEffects>();
     }
   
 }

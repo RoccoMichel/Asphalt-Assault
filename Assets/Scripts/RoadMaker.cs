@@ -1,4 +1,6 @@
 using System.IO;
+using BoltsTools;
+using NaughtyAttributes;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
@@ -9,17 +11,25 @@ public class RoadMaker : MonoBehaviour
 {
 #if UNITY_EDITOR
     
+    [BoltsToolTip("Road Width")]
     public float roadWidth = 8;
+    [BoltsToolTip("Mesh Resolution")]
     public int segmentsPerUnit = 2;
+    [BoltsToolTip("Caps The Road Width At Sharp Corners")]
     public float maxMiterScale = 3;
+    [BoltsToolTip("Offset From Surface To Avoid Z-Fighting")]
     public float surfaceOffset = 0.02f;
 
+    [BoltsToolTip("The Road Texture")]
     public Texture2D roadTexture;
-    public float textureTileLenght = 8;
+    [BoltsToolTip("World Units Texture Repeat Covers (Read Only)")]
+    [ReadOnly][AllowNesting] public float textureTileLength = 8;
     
-    public LayerMask terrainLayer;
+    [BoltsToolTip("Layer Of The Ground")]
+    public LayerMask groundLayer;
     
-    public SplineContainer splineContainer;
+    [BoltsToolTip("The Spline Container (Will Be Assigned When Generating Mesh)")]
+    [ReadOnly][AllowNesting] public SplineContainer splineContainer;
     
     Mesh mesh;
 
@@ -30,6 +40,15 @@ public class RoadMaker : MonoBehaviour
 
     public void GenerateMesh()
     {
+        if (GetComponent<SplineContainer>() == null)
+        {
+            Debug.LogWarning("No SplineContainer attached to " + gameObject.name);
+            return;
+        }
+        
+        if(splineContainer == null)
+            splineContainer = GetComponent<SplineContainer>();
+        
         Spline spline = splineContainer.Spline;
         float length = spline.GetLength();
         int segments = Mathf.Max(1, Mathf.RoundToInt(length * segmentsPerUnit));
@@ -37,7 +56,7 @@ public class RoadMaker : MonoBehaviour
         if (roadTexture != null)
         {
             float aspect = (float)roadTexture.height / roadTexture.width;
-            textureTileLenght = roadWidth * aspect;
+            textureTileLength = roadWidth * aspect;
 
             var mat = GetComponent<MeshRenderer>().sharedMaterial;
             if (mat != null) mat.mainTexture = roadTexture;
@@ -105,7 +124,7 @@ public class RoadMaker : MonoBehaviour
             vertices[v1 + 1] = SnapToTerrain(positions[i] + miter * halfLeft);
             
 
-            float v = dist / textureTileLenght;
+            float v = dist / textureTileLength;
             uvs[v1 + 0] = new Vector2(0, v);
             uvs[v1 + 1] = new Vector2(1, v);
         }
@@ -147,7 +166,7 @@ public class RoadMaker : MonoBehaviour
         }
 
         // Mesh/collider fallback
-        if (Physics.Raycast(pos + Vector3.up * 50f, Vector3.down, out RaycastHit hit, 100f, terrainLayer))
+        if (Physics.Raycast(pos + Vector3.up * 50f, Vector3.down, out RaycastHit hit, 100f, groundLayer))
         {
             pos.y = hit.point.y + surfaceOffset;
         }

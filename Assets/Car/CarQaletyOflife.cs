@@ -3,12 +3,12 @@ using UnityEngine;
 public class CarQaletyOflife : MonoBehaviour
 {
     Rigidbody rb = new();
-    CarFysiks fysiks = new();
+    CarPhysics _physics = new();
     float ligerDamp, aglerDamp;
     bool RotateInAre;
     void Awake(){
         rb = GetComponent<Rigidbody>();
-        fysiks = rb.GetComponent<CarFysiks>();
+        _physics = rb.GetComponent<CarPhysics>();
         ligerDamp = rb.linearDamping;
         aglerDamp = rb.angularDamping;
     }
@@ -18,7 +18,7 @@ public class CarQaletyOflife : MonoBehaviour
             origin = transform.position
         };
 
-        if (Physics.Raycast(ray, out RaycastHit hit, fysiks.ground)) { 
+        if (Physics.Raycast(ray, out RaycastHit hit, _physics.ground)) { 
             return hit;
         }
 
@@ -31,7 +31,7 @@ public class CarQaletyOflife : MonoBehaviour
     }
 
     public void PassInInputs(float Y, bool RotateInAre) {
-        if (!fysiks.isGrounded)
+        if (!_physics.isGrounded)
         {
             rb.linearDamping = ligerDamp * 0.25f;
             rb.angularDamping = aglerDamp * 0.25f;
@@ -47,7 +47,7 @@ public class CarQaletyOflife : MonoBehaviour
             if (RotateInAre && Y != 0)
             {
                 rb.AddTorque(transform.right * Input.GetAxisRaw("Vertical") * 15);
-                fysiks.trust--;
+                _physics.thrust--;
             }
             Debug.DrawLine(transform.position, transform.position + transform.up * 100);
             if (RotateInAre)
@@ -65,6 +65,6 @@ public class CarQaletyOflife : MonoBehaviour
     void FixedUpdate() {
         // Spoler (forses car down if yure going fast)
 
-        rb.AddForce(-transform.up * fysiks.ProjectVelocityOnForwardLine().magnitude * (fysiks.isGrounded ? 0.5f : 0.75f));
+        rb.AddForce(-transform.up * _physics.ProjectVelocityOnForwardLine().magnitude * (_physics.isGrounded ? 0.5f : 0.75f));
     }
 }
