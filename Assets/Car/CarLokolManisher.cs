@@ -7,6 +7,7 @@ public class CarLokolManisher : MonoBehaviour
     public Rigidbody rb;
     public CarPhysics physics;
     public TMP_Text LapConter;
+    public TMP_Text Timer;
     void Start()
     {
         rb = GetComponentInChildren<Rigidbody>();
@@ -25,5 +26,15 @@ public class CarLokolManisher : MonoBehaviour
         Debug.Log("CarPhysics: " + physics);
     }
 
-  
+    private void Update()
+    {
+        float time = LokolSavingSystem.instens.time;
+        int milSek = Mathf.RoundToInt((time % 1)*100);
+        int sek = Mathf.RoundToInt((time - milSek/100)%60);
+        int min = Mathf.RoundToInt((time - milSek/100 - sek)/60);
+        
+        Timer.text =  min + ":" + sek + ":" + milSek;
+    }
+
+
 }

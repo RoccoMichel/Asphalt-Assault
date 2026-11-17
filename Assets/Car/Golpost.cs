@@ -12,6 +12,7 @@ public class Golpost : MonoBehaviour
         if (ponter++ >= chekponts.Length - 1) { // Lope the ponter after a lap
             ponter = 0;
             GM.carPonters[0].lapConter++;
+            LokolSavingSystem.instens.OnFinish();//Save the new best time if you biten the orld rekord
         }
 
         StartCoroutine(chekponts[ponter].Enabol());// Aktivats the next chekpont

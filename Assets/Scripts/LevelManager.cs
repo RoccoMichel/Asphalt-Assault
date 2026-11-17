@@ -4,13 +4,16 @@ using UnityEngine.UI;
 using UnityEngine.Splines;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using BoltsTools;
 
 public class LevelManager : MonoBehaviour
 {
     private int activeLevel;
+    float betsTime = Mathf.Infinity;
     [SerializeField] private RectTransform circuitButtonsParent;
     [SerializeField] private CircuitTransition circuitTransition;
     [SerializeField] private LevelReferences[] levels;
+    [SerializeField] private TMP_Text BetsTimeOnLevel;
     [System.Serializable]
     public struct LevelReferences
     {
@@ -18,11 +21,30 @@ public class LevelManager : MonoBehaviour
         public string sceneName;
         public Sprite sceneGraphic;
         public SplineExtrude circuitSpline;
+     
     }
 
     private void Start()
     {
         GenerateCircuitButtons();
+        UppdateTime();
+    }
+
+    void UppdateTime(){
+        // Fetshens the bets time on the given level
+        betsTime = BoltsSave.GetFloat("Best time " + levels[activeLevel].sceneName);
+        if (betsTime == -1) betsTime = Mathf.Infinity; // Sets the time to infinety if the havent bin 
+
+        if (betsTime != Mathf.Infinity)
+        {
+            int milSek = Mathf.RoundToInt((betsTime % 1) * 100);
+            int sek = Mathf.RoundToInt((betsTime - milSek / 100) % 60);
+            int min = Mathf.RoundToInt((betsTime - milSek / 100 - sek) / 60);
+
+            BetsTimeOnLevel.text = min + ":" + sek + ":" + milSek;
+        }
+        else
+            BetsTimeOnLevel.text = "No recorded time";
     }
 
     public void GenerateCircuitButtons()
@@ -46,6 +68,7 @@ public class LevelManager : MonoBehaviour
     {
         circuitTransition.LoadCircuit(levels[activeLevel].circuitSpline, levels[index].circuitSpline);
         if (activeLevel != index) activeLevel = index;
+        UppdateTime();
     }
 
     public void StartButton()
@@ -60,5 +83,10 @@ public class LevelManager : MonoBehaviour
     public void SetObjectInactive(GameObject go)
     {
         go.SetActive(false);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R)) BoltsSave.ResetSave(); // Sesets Save
     }
 }

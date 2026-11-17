@@ -7,7 +7,8 @@ public class Chekpont : MonoBehaviour
     public BoxCollider coll;
 
     private void OnTriggerEnter(Collider other) {
-        GM.instance.GolpostInstens.PastChekpont();
+        if (other.transform.parent.gameObject == GM.carPonters[0].car)
+            GM.instance.GolpostInstens.PastChekpont();
     }
 
     public IEnumerator Kill() {
