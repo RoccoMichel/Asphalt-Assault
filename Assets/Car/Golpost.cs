@@ -23,6 +23,7 @@ public class Golpost : MonoBehaviour
 
     
     private void Start() {
+        ponter = 0;
         int num = transform.childCount;
         chekponts = new Chekpont[num];
         for (int i = 0; i < num; i++)
