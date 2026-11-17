@@ -18,9 +18,12 @@ public class CarPonter : MonoBehaviour {
         set
         {
             _lapConter = value;
-            lapText.text = _lapConter+"/"+ GM.totiolLaps;
+            lapText.text = _lapConter + "/" + GM.totiolLaps;
             if (_lapConter == GM.totiolLaps)
+            {
                 GM.instance.CarFinsist(index);
+
+            }
         }
     }
 
@@ -58,6 +61,8 @@ public class GM : MonoBehaviour {
     // Runs when a car finst all laps
     public void CarFinsist(int index) {
         SceneManager.LoadScene(0);
+        LokolSavingSystem.instens.OnFinish();//Save the new best time if you biten the orld rekord
+        
     }
- 
+
 }
