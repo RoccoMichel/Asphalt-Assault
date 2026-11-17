@@ -1,0 +1,29 @@
+using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
+
+public class CarLokolManisher : MonoBehaviour
+{
+    public Rigidbody rb;
+    public CarPhysics physics;
+    public TMP_Text LapConter;
+    void Start()
+    {
+        rb = GetComponentInChildren<Rigidbody>();
+        physics = GetComponentInChildren<CarPhysics>();
+        
+        // Code will nedd to be updated when we add lokol mutiplyer
+        GM.carPonters[0] = new();
+        GM.carPonters[0].car = gameObject;
+        GM.carPonters[0].SetUpcarPonter(rb, physics, LapConter);
+
+        Debug.Log(rb.IsUnityNull() + " is rb null at oriden");
+        Debug.Log(physics.IsUnityNull() + " is physiks null at oriden");
+
+        Debug.Log("GameObject: " + gameObject.name);
+        Debug.Log("Rigidbody: " + rb);
+        Debug.Log("CarPhysics: " + physics);
+    }
+
+  
+}
