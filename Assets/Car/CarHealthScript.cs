@@ -28,7 +28,7 @@ public class CarHealthScript : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         float Gforce = collision.impulse.magnitude / 10;
-        if (Gforce > 10)
+        if (Gforce > 5)
         {
             health -= Gforce;
             if (Gforce > 15)

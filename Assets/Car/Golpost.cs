@@ -16,8 +16,8 @@ public class Golpost : MonoBehaviour
 
         StartCoroutine(chekponts[ponter].Enabol());// Aktivats the next chekpont
 
-        GM.carPonters[0].BostCar(1000);
-        GM.carPonters[0].IncreseBosatomiter(30);
+        GM.carPonters[0].BostCar(2500);
+        GM.carPonters[0].IncreseBosatomiter(100);
     }
 
     
