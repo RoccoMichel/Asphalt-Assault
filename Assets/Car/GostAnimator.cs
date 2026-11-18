@@ -34,9 +34,9 @@ public class GostAnimator : MonoBehaviour
     void Update() {
         recapTimer += Time.deltaTime;
         float _maxTime = saveFile.timeBetinRecordedPosisens[ponter] + saveFile.timeBetinRecordedPosisens[ponter+1];
-        if (recapTimer >= _maxTime) {
+        if (Vector3.Distance(transform.position, saveFile.posisens[ponter]) < Time.deltaTime*20 || recapTimer >= _maxTime) {
+            ponter += recapTimer >= _maxTime ? 2 : 1;
             recapTimer = 0;
-            ponter += 2;
             if (ponter >= saveFile.timeBetinRecordedPosisens.Count-1)
                 gameObject.GetComponent<GostAnimator>().enabled = false;
         }
