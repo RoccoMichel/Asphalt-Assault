@@ -9,7 +9,7 @@ public class CarPonter : MonoBehaviour {
     public GameObject car = new();
     public int index = 0;
     int _lapConter;
-    Rigidbody rb = new();
+    public Rigidbody rb = new();
     CarPhysics CarPhysics = new();
     public TMP_Text lapText;
     public int lapConter
