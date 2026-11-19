@@ -33,8 +33,9 @@ public class LevelManager : MonoBehaviour
 
     // the rekierd times for etsh trofy
     public Dictionary<int, float[]> LevTtofys = new() {
-        {0, new float[]{60*2, 60+45, 60+30} },
-        {1, new float[]{60*2, 60+45, 60+30} }
+        // {index, {brons, silver, gold, dimend}}
+        {0, new float[]{60*2, 60+45, 60+30, 60+23.8f} },
+        {1, new float[]{60*2, 60+45, 60+30, 60+20} }
     };
     private void Start()
     {

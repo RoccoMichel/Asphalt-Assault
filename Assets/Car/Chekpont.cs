@@ -23,12 +23,12 @@ public class Chekpont : MonoBehaviour
     }
     public IEnumerator Enabol()
     {
+        gameObject.SetActive(true);
         coll.enabled = true;
         float sped = 40;
         Animation.clip = enabol;
         Animation.Play();
         yield return new WaitForSeconds(enabol.averageDuration);
-        gameObject.SetActive(true);
     }
 
     void Update(){

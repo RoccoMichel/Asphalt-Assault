@@ -1859,7 +1859,7 @@ MonoBehaviour:
   levels:
   - circuitName: Test Level
     sceneName: TestLevel
-    sceneGraphic: {fileID: 0}
+    sceneGraphic: {fileID: 21300000, guid: 69117b0b892a9984aa54b4d542a5d072, type: 3}
     circuitSpline: {fileID: 2065875500}
   - circuitName: Empty Level
     sceneName: SampleScene
