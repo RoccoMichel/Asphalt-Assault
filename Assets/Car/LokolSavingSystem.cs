@@ -1,4 +1,5 @@
 using BoltsTools;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
@@ -15,7 +16,7 @@ public class LokolSavingSystem : MonoBehaviour
     public static LokolSavingSystem instens;
     float bestTime = 0;
     public float time = 0;
-
+    bool timeConts= true;
     
 
     private void Start() {
@@ -30,15 +31,30 @@ public class LokolSavingSystem : MonoBehaviour
         bestTime = BoltsSave.GetFloat("Best time " + SceneManager.GetActiveScene().name);
         if (bestTime == -1) bestTime = Mathf.Infinity;
     }
+
+    IEnumerator StopRecording() {
+        if (bestTime > time) BoltsSave.SaveFloatValue("Best time " + SceneManager.GetActiveScene().name, time);
+
+        GM.carPonters[0].car.GetComponent<PlayerInputs>().enabled = false;
+        timeConts = false;
+
+        yield return new WaitForSeconds(5);
+
+        if (bestTime > time) BoltsSave.SaveClassVariable("Gost data " + SceneManager.GetActiveScene().name, gostSaveFile);
+
+        SceneManager.LoadScene(0); // temp
+    }
     public void OnFinish() {
-        if (bestTime > time) {
-            BoltsSave.SaveFloatValue("Best time " + SceneManager.GetActiveScene().name, time);
-            BoltsSave.SaveClassVariable("Gost data " + SceneManager.GetActiveScene().name, gostSaveFile);
-            Debug.Log("New rekord! " + bestTime + " to " + time);
-        }
+        StartCoroutine(StopRecording());
     }
     void Update() {
-        time += Time.deltaTime;
+        if (timeConts) 
+            time += Time.deltaTime;
+
+        //safty
+        if (gostSaveFile.posisens.Count == 0) {
+            gostSaveFile.posisens.Add(oldPos);
+        }
 
         recapTimer += Time.deltaTime;
         float DistensTillNextSave = 0.5f * Mathf.Max(0.5f, GM.carPonters[0].rb.linearVelocity.magnitude);

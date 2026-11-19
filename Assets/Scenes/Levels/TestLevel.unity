@@ -6935,6 +6935,7 @@ MonoBehaviour:
     posisens: []
   ponter: 1
   recapTimer: 0
+  arow: {fileID: 0}
 --- !u!1001 &1101257069
 PrefabInstance:
   m_ObjectHideFlags: 0

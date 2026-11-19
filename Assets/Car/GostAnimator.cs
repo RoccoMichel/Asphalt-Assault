@@ -12,7 +12,7 @@ public class GostAnimator : MonoBehaviour
     public float recapTimer = 0;
     void Start() {
         saveFile = BoltsSave.LoadClass<GostSaveFile>("Gost data " + SceneManager.GetActiveScene().name); 
-        if (saveFile.posisens.Count == 0) gameObject.active = false; 
+        if (saveFile.posisens.Count == 0) gameObject.active = false;
     }
 
     Vector3 Beziey(Vector3 p1, Vector3 p2, Vector3 p3, float time) {

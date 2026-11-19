@@ -60,9 +60,7 @@ public class GM : MonoBehaviour {
     
     // Runs when a car finst all laps
     public void CarFinsist(int index) {
-        SceneManager.LoadScene(0);
         LokolSavingSystem.instens.OnFinish();//Save the new best time if you biten the orld rekord
-        
     }
 
 }

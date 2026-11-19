@@ -5,15 +5,22 @@ using UnityEngine.Splines;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using BoltsTools;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class LevelManager : MonoBehaviour
 {
-    private int activeLevel;
+
+    public int activeLevel;
     float betsTime = Mathf.Infinity;
     [SerializeField] private RectTransform circuitButtonsParent;
     [SerializeField] private CircuitTransition circuitTransition;
-    [SerializeField] private LevelReferences[] levels;
+    [SerializeField] public LevelReferences[] levels;
     [SerializeField] private TMP_Text BetsTimeOnLevel;
+    [SerializeField] public int nuberOfLevels;
+    [SerializeField] public List<GameObject> TrofysPrefabs;
+
+
     [System.Serializable]
     public struct LevelReferences
     {
@@ -21,15 +28,21 @@ public class LevelManager : MonoBehaviour
         public string sceneName;
         public Sprite sceneGraphic;
         public SplineExtrude circuitSpline;
-     
+
     }
 
+    // the rekierd times for etsh trofy
+    public Dictionary<int, float[]> LevTtofys = new() {
+        {0, new float[]{60*2, 60+45, 60+30} },
+        {1, new float[]{60*2, 60+45, 60+30} }
+    };
     private void Start()
     {
         GenerateCircuitButtons();
         UppdateTime();
     }
 
+   
     void UppdateTime(){
         // Fetshens the bets time on the given level
         betsTime = BoltsSave.GetFloat("Best time " + levels[activeLevel].sceneName);
@@ -88,5 +101,7 @@ public class LevelManager : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R)) BoltsSave.ResetSave(); // Sesets Save
+
+     
     }
 }
