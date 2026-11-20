@@ -8,6 +8,8 @@ public class CarLokolManisher : MonoBehaviour
     public CarPhysics physics;
     public TMP_Text LapConter;
     public TMP_Text Timer;
+    [SerializeField] private PlayerInputs playerInputs;
+    [SerializeField] private GameObject playerUi;
     void Start()
     {
         rb = GetComponentInChildren<Rigidbody>();
@@ -26,6 +28,10 @@ public class CarLokolManisher : MonoBehaviour
         Debug.Log("CarPhysics: " + physics);
     }
 
+    public void ShotOf() {
+        playerInputs.enabled = false;
+        playerUi.active = false;
+    } 
     private void Update()
     {
         float time = LokolSavingSystem.instens.time;

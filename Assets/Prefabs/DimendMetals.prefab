@@ -68,6 +68,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DimendMetals
       objectReference: {fileID: 0}
+    - target: {fileID: 4974984522306558807, guid: 245bc787bcd627c46a3a8ac432aa0cfc, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5958438921693756439, guid: 245bc787bcd627c46a3a8ac432aa0cfc, type: 3}
       propertyPath: m_Intensity
       value: 5
@@ -86,7 +90,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8912049515002365231, guid: 245bc787bcd627c46a3a8ac432aa0cfc, type: 3}
       propertyPath: m_Intensity
-      value: 5
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 8912049515002365231, guid: 245bc787bcd627c46a3a8ac432aa0cfc, type: 3}
       propertyPath: m_Shadows.m_Type

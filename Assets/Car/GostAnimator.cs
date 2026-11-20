@@ -7,11 +7,11 @@ using UnityEngine.SceneManagement;
 
 public class GostAnimator : MonoBehaviour
 {
-    public GostSaveFile saveFile = new();
+    public SaveFile saveFile = new();
     public int ponter = 1;
     public float recapTimer = 0;
     void Start() {
-        saveFile = BoltsSave.LoadClass<GostSaveFile>("Gost data " + SceneManager.GetActiveScene().name); 
+        saveFile = BoltsSave.LoadClass<SaveFile>("Save data " + SceneManager.GetActiveScene().name); 
         if (saveFile.posisens.Count == 0) gameObject.active = false;
     }
 

@@ -5122,6 +5122,8 @@ MonoBehaviour:
   physics: {fileID: 7300830118628942783}
   LapConter: {fileID: 7924771234954706594}
   Timer: {fileID: 547089353601072661}
+  playerInputs: {fileID: 6660311326904449438}
+  playerUi: {fileID: 1054468937068806062}
 --- !u!1 &1054468937068806062
 GameObject:
   m_ObjectHideFlags: 0
@@ -10911,7 +10913,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -16.801}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 852, y: 561}
+  m_AnchoredPosition: {x: 971, y: 552}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8698367790239446289
@@ -12082,7 +12084,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 885, y: 495}
+  m_AnchoredPosition: {x: 920.2, y: 512.9}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7725349501967448662

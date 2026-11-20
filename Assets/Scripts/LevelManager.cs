@@ -46,7 +46,7 @@ public class LevelManager : MonoBehaviour
    
     void UppdateTime(){
         // Fetshens the bets time on the given level
-        betsTime = BoltsSave.GetFloat("Best time " + levels[activeLevel].sceneName);
+        betsTime = BoltsSave.LoadClass<SaveFile>("Save data " + SceneManager.GetActiveScene().name).bestTimes[0];
         if (betsTime == -1) betsTime = Mathf.Infinity; // Sets the time to infinety if the havent bin 
 
         if (betsTime != Mathf.Infinity)

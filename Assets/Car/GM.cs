@@ -1,3 +1,4 @@
+using BoltsTools;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
@@ -52,11 +53,15 @@ public class GM : MonoBehaviour {
     public static CarPonter[] carPonters = new CarPonter[1];
     public static int totiolLaps = 3;
     public int TotiolLaps;
-    private void Start() {
+
+    public static SaveFile LevelSaveFile;
+    private void Awake() {
+        LevelSaveFile = BoltsSave.LoadClass<SaveFile>("Save data " + SceneManager.GetActiveScene().name);
         instance = this;
         totiolLaps = TotiolLaps;
         carPonters[0].lapConter = 0;
     }
+   
     
     // Runs when a car finst all laps
     public void CarFinsist(int index) {
