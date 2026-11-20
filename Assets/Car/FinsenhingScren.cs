@@ -1,6 +1,7 @@
 using BoltsTools;
 using DG.Tweening;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,18 +21,15 @@ public class FinsenhingScren : MonoBehaviour
     }
     void Awake() {
         // we carate a sortedd list of teh best time wher the curent time gand is negativ as a marker
-        List<float> times = GM.LevelSaveFile.bestTimes;
+        List<float> times = GM.LevelSaveFile.bestTimes.ToList();
         times.Add(LokolSavingSystem.instens.time);
-        times.Sort();
-        times[times.IndexOf(LokolSavingSystem.instens.bestTime)] = -LokolSavingSystem.instens.bestTime;
+        times[times.IndexOf(LokolSavingSystem.instens.time)-1] = -LokolSavingSystem.instens.time;
+        
         int num = times.Count;
 
         float ofsetX = 0.25f*Screen.currentResolution.width;
         float ofsetY = 0.05f * Screen.currentResolution.height;
         for (int i = 0; i < num; i++) {
-         
-
-
             GameObject card = Instantiate(finiseingTimeCard, marcer.position + Vector3.down*i* ofsetY - Vector3.right* ofsetX, marcer.rotation);
             card.transform.SetParent(finiseingTimeCard.transform.parent);
             card.GetComponentInChildren<TextMeshProUGUI>().text = timeToTimer(Mathf.Abs(times[i]));

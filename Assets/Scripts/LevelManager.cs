@@ -1,12 +1,13 @@
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Splines;
-using System.Collections;
-using UnityEngine.SceneManagement;
 using BoltsTools;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Splines;
+using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
@@ -46,7 +47,7 @@ public class LevelManager : MonoBehaviour
    
     void UppdateTime(){
         // Fetshens the bets time on the given level
-        betsTime = BoltsSave.LoadClass<SaveFile>("Save data " + SceneManager.GetActiveScene().name).bestTimes[0];
+        betsTime = BoltsSave.LoadClass<SaveFile>("Save data " + levels[activeLevel].sceneName).bestTimes[0];
         if (betsTime == -1) betsTime = Mathf.Infinity; // Sets the time to infinety if the havent bin 
 
         if (betsTime != Mathf.Infinity)

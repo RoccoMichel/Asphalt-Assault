@@ -39,7 +39,7 @@ public class LokolSavingSystem : MonoBehaviour
     }
 
     IEnumerator StopRecording() {
-        EndScren.active = true;
+        EndScren.SetActive(true);
         GM.LevelSaveFile.bestTimes.Add(time);
         GM.LevelSaveFile.bestTimes.Sort();
         int Leg = GM.LevelSaveFile.bestTimes.Count;

@@ -22,7 +22,7 @@ public class CircuitButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void destroyTrofy() { Destroy(Trofys); }
     public void DisplayTrof(int i) {
         Debug.Log("Spont trofy");
-        float _betsTime = BoltsSave.LoadClass<SaveFile>("Save data " + SceneManager.GetActiveScene().name).bestTimes[0]; // Verey inafisent neds update evesely
+        float _betsTime = BoltsSave.LoadClass<SaveFile>("Save data " + levelManager.levels[index].sceneName).bestTimes[0]; // Verey inafisent neds update evesely
         
         if (_betsTime == -1) _betsTime = Mathf.Infinity;
         float[] _times = levelManager.LevTtofys[i];

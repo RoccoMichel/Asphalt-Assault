@@ -10877,7 +10877,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c2fefe8d2d02a84cb3c480ec1f715d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarHellfScript
-  health: 100
+  health: 50
   slider: {fileID: 717216485603770122}
 --- !u!1 &4761991715718567466
 GameObject:
