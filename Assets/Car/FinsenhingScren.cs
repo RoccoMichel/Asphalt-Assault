@@ -22,7 +22,9 @@ public class FinsenhingScren : MonoBehaviour
     void Awake() {
         // we carate a sortedd list of teh best time wher the curent time gand is negativ as a marker
         List<float> times = GM.LevelSaveFile.bestTimes.ToList();
+        times.Remove(LokolSavingSystem.instens.time);
         times.Add(LokolSavingSystem.instens.time);
+        times.Sort();
         times[times.IndexOf(LokolSavingSystem.instens.time)-1] = -LokolSavingSystem.instens.time;
         
         int num = times.Count;
