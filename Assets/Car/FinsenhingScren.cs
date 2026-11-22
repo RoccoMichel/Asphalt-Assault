@@ -22,14 +22,14 @@ public class FinsenhingScren : MonoBehaviour
     void Awake() {
         // we carate a sortedd list of teh best time wher the curent time gand is negativ as a marker
         List<float> times = GM.LevelSaveFile.bestTimes.ToList();
-        times.Remove(LokolSavingSystem.instens.time);
-        times.Add(LokolSavingSystem.instens.time);
+        float newTime = LokolSavingSystem.instens.time;
+        times.Add(newTime);
         times.Sort();
-        times[times.IndexOf(LokolSavingSystem.instens.time)-1] = -LokolSavingSystem.instens.time;
+        times[times.FindIndex(t => Mathf.Abs(t - newTime) <= 0.001f)] = -newTime;
         
         int num = times.Count;
 
-        float ofsetX = 0.25f*Screen.currentResolution.width;
+        float ofsetX = 0.25f * Screen.currentResolution.width;
         float ofsetY = 0.05f * Screen.currentResolution.height;
         for (int i = 0; i < num; i++) {
             GameObject card = Instantiate(finiseingTimeCard, marcer.position + Vector3.down*i* ofsetY - Vector3.right* ofsetX, marcer.rotation);

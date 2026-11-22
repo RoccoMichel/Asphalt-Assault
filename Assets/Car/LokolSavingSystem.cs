@@ -46,7 +46,7 @@ public class LokolSavingSystem : MonoBehaviour
         if (Leg > 30) GM.LevelSaveFile.bestTimes.RemoveAt(Leg-1);
              
         GM.carPonters[0].car.GetComponent<CarLokolManisher>().ShotOf();
-        timeConts = false;
+      
 
         yield return new WaitForSeconds(1);
 
@@ -63,6 +63,7 @@ public class LokolSavingSystem : MonoBehaviour
         SceneManager.LoadScene(0); // temp
     }
     public void OnFinish() {
+        timeConts = false;
         StartCoroutine(StopRecording());
     }
     void Update() {

@@ -19,8 +19,8 @@ public class CamraControler : MonoBehaviour
     void LateUpdate()
     {
         Vector3 vel = new Vector3(car.linearVelocity.x, 0, car.linearVelocity.z);
-        transform.position = Vector3.Lerp(transform.position, car.position - prodjectVecOnXZplabe(vel + car.transform.forward*0.5f) * 5 + Vector3.up*2, Time.deltaTime * 12);
-        lukeat.position = Vector3.Lerp(lukeat.position, car.position + prodjectVecOnXZplabe(vel + car.transform.forward * 0.5f)*4, Time.deltaTime * 12); 
+        transform.position = Vector3.Lerp(transform.position, car.position - prodjectVecOnXZplabe(vel + car.transform.forward*0.5f) * 5 + Vector3.up*2, 1f - Mathf.Exp(-12f * Time.deltaTime));
+        lukeat.position = Vector3.Lerp(lukeat.position, car.position + prodjectVecOnXZplabe(vel + car.transform.forward * 0.5f)*4, 1f - Mathf.Exp(-12f * Time.deltaTime)); 
         cam.fieldOfView = Mathf.Clamp(car.linearVelocity.magnitude*3, 60, 100);
         
         
