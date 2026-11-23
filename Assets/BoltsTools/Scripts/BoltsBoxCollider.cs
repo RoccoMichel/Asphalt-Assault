@@ -1,13 +1,15 @@
 using UnityEditor;
 using UnityEngine;
 
-[ExecuteAlways][AddComponentMenu("Bolts Tools/Bolts Box Collider")]
+[AddComponentMenu("Bolts Tools/Bolts Box Collider")]
 public class BoltsBoxCollider : MonoBehaviour
 {
-    public BoxCollider boxCollider { get; private set; }
+    public BoxCollider boxCollider;
 
     [HideInInspector]
     public bool px, py, pz, nx, ny, nz;
+
+    public bool showBoxCollider;
     
     public void SetBounds()
     {
@@ -48,23 +50,11 @@ public class BoltsBoxCollider : MonoBehaviour
         boxCollider.center = (min + max) / 2;
         boxCollider.size = max - min;
     }
-    
-    private void OnEnable()
-    {
-        if (boxCollider == null)
-        {
-            boxCollider = gameObject.GetComponent<BoxCollider>() == null ? gameObject.AddComponent<BoxCollider>() : 
-                gameObject.GetComponent<BoxCollider>();
-        }
-    }
 
-    private void Awake()
+    void Reset()
     {
-        if (boxCollider == null)
-        {
-            boxCollider = gameObject.GetComponent<BoxCollider>() == null ? gameObject.AddComponent<BoxCollider>() : 
-                gameObject.GetComponent<BoxCollider>();
-        }
+        boxCollider = gameObject.GetComponent<BoxCollider>() == null ? gameObject.AddComponent<BoxCollider>() : 
+            gameObject.GetComponent<BoxCollider>();
     }
 
     private void OnDestroy()

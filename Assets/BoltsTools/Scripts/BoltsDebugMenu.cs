@@ -175,21 +175,6 @@ namespace BoltsTools
             Initialize();
         }
         
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-#endif
-        public static void Initialize()
-        {
-            if(_settings != null || _isLoading)
-                return;
-
-            _isLoading = true;
-
-            _settings = Resources.Load<BoltsDebugMenuSettings>("DebugSettings");
-            Debug.Log("Debug Settings Loaded");
-
-            _isLoading = false;
-        }
-
         [MenuItem("GameObject/Bolts Debug Object #t", false, 5)]
         static void CreateOBJ(MenuCommand menuCommand)
         {
@@ -203,6 +188,21 @@ namespace BoltsTools
             Undo.RegisterCreatedObjectUndo(obj, "Create Bots Debug Object");
 
             Selection.activeObject = obj;
+        }
+        
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+#endif
+        public static void Initialize()
+        {
+            if(_settings != null || _isLoading)
+                return;
+
+            _isLoading = true;
+
+            _settings = Resources.Load<BoltsDebugMenuSettings>("DebugSettings");
+            Debug.Log("Debug Settings Loaded");
+
+            _isLoading = false;
         }
     }
 }

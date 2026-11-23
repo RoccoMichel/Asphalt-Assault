@@ -56,7 +56,7 @@ namespace BoltsTools
         /// <summary>
         /// Adds A Command
         /// </summary>
-        /// <param name="commandName">The Name For The Command</param>
+        /// <param name="commandName">The Name For The Command. No Spaces</param>
         /// <param name="methodName">The Name Of The Method The Command Should Run (Don't Add Arguments)</param>
         /// <param name="target">What Script On What Game Object Should Run The Command</param>
         /// <param name="description">The Commands Description (Can Be Left Empty)</param>
@@ -121,6 +121,21 @@ namespace BoltsTools
             addedCommand = true;
         }
 
+        /// <summary>
+        /// Removes A Command
+        /// </summary>
+        /// <param name="commandName">Name Of The Command To Be Removied</param>
+        public static void RemoveCommand(string commandName)
+        {
+            int index = -1;
+            index = commands.FindIndex(x => x.name == commandName);
+
+            if (index > -1)
+                commands.RemoveAt(index);
+            else
+                Debug.LogWarning($"Did Not Find Command: {commandName}");
+        }
+
         void RunCommand()
         {
             string input = commandTyped.Trim();
@@ -168,7 +183,7 @@ namespace BoltsTools
                 if (tokenIndex >= tokens.Count)
                 {
                     Debug.LogWarning(
-                        $"Command {commandName} Expected {parameters.Length} Arguments(s) But Recived {i}");
+                        $"Command {commandName} Expected {parameters.Length} Arguments(s) But Received {i}");
                     return;
                 }
 
@@ -300,6 +315,8 @@ namespace BoltsTools
                     else if (lastCommand.Length > 0)
                         focusedArea = focusedArea == "Command" ? "LastCommand" : "Command";
                     
+                    moveCursorToEnd = true;
+                    
                     Event.current.Use();
                 }
                 
@@ -399,13 +416,13 @@ namespace BoltsTools
 
         public void ShowCommands()
         {
-            if(commands.Count == 0) 
+            if(commands.Count == 1) 
             {
                 Debug.LogError("No Commands Register");
                 return;
             }
             
-            // Does "int = 1" So That There Is No Empty Spaces
+            // Does "int = 1" So That There Is No Empty Spaces When Drawing
             string allCommands = $"Command: {commands[0].name}    Description: {commands[0].description}";
             for (int i = 1; i < commands.Count; i++)
             {

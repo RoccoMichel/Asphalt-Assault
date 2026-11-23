@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using BoltsTools;
 using UnityEditor;
 using UnityEngine;
@@ -475,6 +476,17 @@ namespace editor.BoltsTools
             BoltsBoxCollider customBC = (BoltsBoxCollider)target;
 
             DrawDefaultInspector();
+            
+            if(customBC.showBoxCollider)
+            {
+                if (GUILayout.Button("Hide BoxCollider"))
+                    customBC.showBoxCollider = false;
+            }
+            else
+            {
+                if(GUILayout.Button("Show BoxCollider"))
+                    customBC.showBoxCollider = true;
+            }
 
             SerializedProperty px = serializedObject.FindProperty("px");
             SerializedProperty py = serializedObject.FindProperty("py");
@@ -505,10 +517,10 @@ namespace editor.BoltsTools
 
             if (customBC.boxCollider != null)
             {
-                customBC.boxCollider.hideFlags = HideFlags.HideInInspector;
+                customBC.boxCollider.hideFlags = customBC.showBoxCollider  ? HideFlags.None : HideFlags.HideInInspector;
 
                 if (boxColliderEditor == null)
-                    boxColliderEditor = Editor.CreateEditor(customBC.boxCollider);
+                    boxColliderEditor = CreateEditor(customBC.boxCollider);
 
                 boxColliderEditor.DrawDefaultInspector();
             }
@@ -806,7 +818,7 @@ namespace editor.BoltsTools
             GUILayout.FlexibleSpace();
 
             GUIContent lockIcon = EditorGUIUtility.IconContent(scaleLocked ? "Linked" : "Unlinked");
-            lockIcon.tooltip = scaleLocked ? "Unlock proportional scale" : "Lock proportional scale";
+            lockIcon.tooltip = scaleLocked ? "Unlock Proportional Scale" : "Lock Proportional scale";
 
             if (GUILayout.Button(lockIcon, GUIStyle.none, GUILayout.Width(20), GUILayout.Height(20)))
             {
@@ -836,6 +848,150 @@ namespace editor.BoltsTools
                 lastScale = newScale;
 
             return changed;
+        }
+    }
+
+    [CustomPropertyDrawer(typeof(BoltsStaticViewerAttribute))]
+    public class StaticViewer : PropertyDrawer
+    {
+        private const BindingFlags Flags = 
+            BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) =>
+            EditorGUIUtility.singleLineHeight;
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            var attr = (BoltsStaticViewerAttribute)attribute;
+            Type owner = attr.DeclaringType ?? fieldInfo.DeclaringType;
+            
+            MemberInfo member = null;
+            for (Type t = owner; t != null && member == null; t = t.BaseType)
+            {
+                member = (MemberInfo)t.GetField(attr.MemberName ?? "", Flags)
+                         ?? t.GetProperty(attr.MemberName ?? "", Flags);
+            }
+
+            if (member == null)
+            {
+                EditorGUI.LabelField(position, label,
+                    new GUIContent($"Static '{attr.MemberName}' Not Found On {owner.Name}"));
+                
+                return;
+            }
+            
+            DrawMember(position, member, attr);
+        }
+
+        public static void DrawStatic(Type type)
+        {
+            bool headerDrawn = false;
+            for (Type t = type;
+                 t != null && t != typeof(MonoBehaviour) && t != typeof(ScriptableObject);
+                 t = t.BaseType)
+            {
+                foreach (MemberInfo member in t.GetMembers(Flags))
+                {
+                    if(member.MemberType != MemberTypes.Field && member.MemberType != MemberTypes.Property)  continue;
+                    
+                    var attr = member.GetCustomAttribute<BoltsStaticViewerAttribute>();
+                    if(attr == null) continue;
+
+                    if (!headerDrawn)
+                    {
+                        EditorGUILayout.Space();
+                        EditorGUILayout.LabelField("Static", EditorStyles.boldLabel);
+                        headerDrawn = true;
+                    }
+                    
+                    Rect r = EditorGUILayout.GetControlRect();
+                    DrawMember(r, member, attr);
+                }
+            }
+        }
+
+        public static void DrawMember(Rect position, MemberInfo member, BoltsStaticViewerAttribute attr)
+        {
+            FieldInfo field = member as FieldInfo;
+            PropertyInfo prop = member as PropertyInfo;
+
+            if (prop != null && !prop.CanRead)
+            {
+                EditorGUI.LabelField(position, member.Name, "(Write-Only)");
+                return;
+            }
+
+            Type type = field != null ? field.FieldType :  prop.PropertyType;
+            object value = field != null ? field.GetValue(null) : prop.GetValue(null);
+            bool writable = field != null ? !field.IsInitOnly && !field.IsLiteral : prop.CanWrite;
+            
+            var content = new GUIContent(ObjectNames.NicifyVariableName(member.Name), "static " + type.Name);
+            
+            bool prevEnabled = GUI.enabled;
+            GUI.enabled = prevEnabled && writable && attr.Editable;
+            
+            EditorGUI.BeginChangeCheck();
+            object newValue = DrawValue(position, content, type, value);
+            bool changed = EditorGUI.EndChangeCheck();
+            
+            GUI.enabled = prevEnabled;
+
+            if (changed)
+            {
+                if (field != null) field.SetValue(null, newValue);
+                else prop.SetValue(null, newValue);
+            }
+        }
+
+        static object DrawValue(Rect r, GUIContent label, Type type, object value)
+        {
+            if(type == typeof(int)) return EditorGUI.IntField(r, label, (int)value);
+            if(type == typeof(long)) return EditorGUI.FloatField(r, label, (long)value);
+            if(type == typeof(float)) return EditorGUI.FloatField(r, label, (float)value);
+            if(type == typeof(double)) return EditorGUI.DoubleField(r, label, (double)value);
+            if(type == typeof(bool)) return EditorGUI.Toggle(r, label, (bool)value);
+            if(type == typeof(string)) return EditorGUI.TextField(r, label, (string)value);
+            if(type == typeof(Color)) return EditorGUI.ColorField(r, label, (Color)value);
+            if(type == typeof(Vector2)) return EditorGUI.Vector2Field(r, label, (Vector2)value);
+            if(type == typeof(Vector2Int)) return EditorGUI.Vector2IntField(r, label, (Vector2Int)value);
+            if(type == typeof(Vector3)) return EditorGUI.Vector3Field(r, label, (Vector3)value);
+            if(type == typeof(Vector3Int)) return EditorGUI.Vector3IntField(r, label, (Vector3Int)value);
+            if(type == typeof(Vector4)) return EditorGUI.Vector4Field(r, label, (Vector4)value);
+            if(type == typeof(AnimationCurve)) return EditorGUI.CurveField(r, label, (AnimationCurve)value ?? new AnimationCurve());
+
+            if (type.IsEnum)
+            {
+                return type.IsDefined(typeof(FlagsAttribute), false)
+                    ? EditorGUI.EnumFlagsField(r, label, (Enum)value)
+                    : EditorGUI.EnumPopup(r, label, (Enum)value);
+            }
+            
+            if(typeof(UnityEngine.Object).IsAssignableFrom(type))
+                return EditorGUI.ObjectField(r, label, (UnityEngine.Object)value, type, true);
+            
+            return value;
+        }
+    }
+
+    [CanEditMultipleObjects]
+    [CustomEditor(typeof(MonoBehaviour), true, isFallback = true)]
+    public class ShowStaticMonoBehaviourEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            DrawDefaultInspector();
+            StaticViewer.DrawStatic(target.GetType());
+        }
+    }
+
+    [CanEditMultipleObjects]
+    [CustomEditor(typeof(MonoBehaviour), true, isFallback = true)]
+    public class ShowStaticScriptableObjectEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            DrawDefaultInspector();
+            StaticViewer.DrawStatic(target.GetType());
         }
     }
     
