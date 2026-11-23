@@ -5,11 +5,12 @@ using UnityEngine.XR;
 
 public class Destruktibol : MonoBehaviour
 {
-    public float sturtynes;
     [BoltsComment(@"Fore the code to work
 1) have tow coloder on the obj whan triget on top and whan diaktivated on the botom
 2) Have a partikal sysem on the botom of the child list
 3) Inclod a colider and rb (bofe diaktivated) on evry physisk pise of the ovj")]
+    public float sturtynes;
+   
     List<Rigidbody> rbs = new();
     List<Collider> colliders = new();
     Collider[] col;
@@ -56,7 +57,7 @@ public class Destruktibol : MonoBehaviour
                 colliders[index].enabled = true;
                 rbs[index].isKinematic = false;
                 Vector3 forse = -(other.transform.position - transform.position).normalized * enery;
-                rbs[index].AddForce(forse * Random.Range(0.9f, 1.1f) * 0.5f);
+                rbs[index].AddForce(forse * Random.Range(0.9f, 1.1f) * 0.25f);
 
                 StartCoroutine(BoltsTimer.WaitFor(() => rbs[index].IsSleeping(), () =>
                 {
