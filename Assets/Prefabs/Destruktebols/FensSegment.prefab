@@ -4906,7 +4906,7 @@ GameObject:
   - component: {fileID: 2791722587252397968}
   - component: {fileID: 4888261915592053587}
   - component: {fileID: 5556180479220808508}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: FensSegment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5215,6 +5215,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Spike (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b69ca75d5e7ac2e499d734eb9e1aac7b, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5296,6 +5300,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b69ca75d5e7ac2e499d734eb9e1aac7b, type: 3}
       propertyPath: m_Name
       value: Spike (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b69ca75d5e7ac2e499d734eb9e1aac7b, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5683,6 +5691,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Spike (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b69ca75d5e7ac2e499d734eb9e1aac7b, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5913,6 +5925,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b69ca75d5e7ac2e499d734eb9e1aac7b, type: 3}
       propertyPath: m_Name
       value: Spike
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b69ca75d5e7ac2e499d734eb9e1aac7b, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
