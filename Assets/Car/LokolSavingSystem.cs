@@ -19,6 +19,10 @@ public class LokolSavingSystem : MonoBehaviour
     public float time = 0;
     bool timeConts= true;
     
+    public float timeBetweenSave = 0.25f;
+
+    bool finished;
+    
 
     private void Start() {
         BoltsSave.Initialize();
@@ -51,9 +55,10 @@ public class LokolSavingSystem : MonoBehaviour
         yield return new WaitForSeconds(1);
 
         // overites the gost data if a prives time whose faster
-        if (bestTime <= time) {
-            SaveFile.timeBetinRecordedPosisens = GM.LevelSaveFile.timeBetinRecordedPosisens;
-            SaveFile.posisens = GM.LevelSaveFile.posisens;
+        if (bestTime <= time)
+        {
+            SaveFile.timeBetinRecordedPosisens = new List<float>(GM.LevelSaveFile.timeBetinRecordedPosisens);
+            SaveFile.posisens = new List<Vector3>(GM.LevelSaveFile.posisens);
         }
            
         BoltsSave.SaveClassVariable("Save data " + SceneManager.GetActiveScene().name, SaveFile);
@@ -62,13 +67,21 @@ public class LokolSavingSystem : MonoBehaviour
 
         SceneManager.LoadScene(0); // temp
     }
-    public void OnFinish() {
+    public void OnFinish() 
+    {
+        if(finished) return;
+        finished = true;
         timeConts = false;
+        
+        SaveFile.posisens.Add(car.position);
+        SaveFile.timeBetinRecordedPosisens.Add(recapTimer);
+        
         StartCoroutine(StopRecording());
     }
-    void Update() {
-        if (timeConts) 
-            time += Time.deltaTime;
+    void Update() 
+    {
+        if (timeConts) time += Time.deltaTime;
+        if(finished) return;
 
         //safty
         if (SaveFile.posisens.Count == 0) {
@@ -76,7 +89,7 @@ public class LokolSavingSystem : MonoBehaviour
         }
 
         recapTimer += Time.deltaTime;
-        float DistensTillNextSave = 0.5f * Mathf.Max(0.5f, GM.carPonters[0].rb.linearVelocity.magnitude);
+        float DistensTillNextSave = timeBetweenSave * Mathf.Max(0.5f, GM.carPonters[0].rb.linearVelocity.magnitude);
         if (Vector3.Distance(SaveFile.posisens.Last(), car.position) > DistensTillNextSave)
         {
             SaveFile.posisens.Add(car.position);

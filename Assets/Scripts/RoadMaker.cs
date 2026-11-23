@@ -2,15 +2,15 @@ using System.IO;
 using BoltsTools;
 using NaughtyAttributes;
 using Unity.Mathematics;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Splines;
 
+#if UNITY_EDITOR
+using UnityEditor;
+
 public class RoadMaker : MonoBehaviour
 {
-#if UNITY_EDITOR
-    
     [BoltsToolTip("Road Width")]
     public float roadWidth = 8;
     [BoltsToolTip("Mesh Resolution")]
@@ -234,6 +234,5 @@ public class RoadMaker : MonoBehaviour
         
         Debug.Log("Road mesh saved to " + pathAndName);
     }
-    
-#endif
 }
+#endif
