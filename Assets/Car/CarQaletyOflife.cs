@@ -46,7 +46,7 @@ public class CarQaletyOflife : MonoBehaviour
             // are controle
             if (RotateInAre && Y != 0)
             {
-                rb.AddTorque(transform.right * Input.GetAxisRaw("Vertical") * 15);
+                rb.AddTorque(transform.right * Y * 15);
                 _physics.thrust--;
             }
             Debug.DrawLine(transform.position, transform.position + transform.up * 100);
