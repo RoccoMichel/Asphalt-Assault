@@ -10,7 +10,7 @@ public class CarLokolManisher : MonoBehaviour
     public TMP_Text Timer;
     [SerializeField] private PlayerInputs playerInputs;
     [SerializeField] private GameObject playerUi;
-    void Start()
+    void Awake()
     {
         rb = GetComponentInChildren<Rigidbody>();
         physics = GetComponentInChildren<CarPhysics>();

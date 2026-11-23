@@ -20,20 +20,31 @@ public class CarPhysics : MonoBehaviour
 
     [HideInInspector] public bool isGrounded, isSliding = false;
     public LayerMask ground;
-    public float horsePower,boost,steering, grip, springDampening;
+    public float horsePower,boost,steering, grip, springDampening, downworsForse;
     public Transform[] wheels;
     public Slider slider;
     [HideInInspector] public Rigidbody rb = new();
     float _thrust, maxThrust = 500;
     CarEffects carEffects;
 
+    bool IsGrodnded() {
+        float DistenStoGrond = 1;
+        return Physics.Raycast(transform.position, Vector3.down, DistenStoGrond, ground);
+    }
     public void PassInInputs(float X, float Y, bool bost) {
-        isGrounded = (GetSuspensionForce(transform.position, 1, 1) != 0);
+        isGrounded = (GetSuspensionForce(transform.position, 1, 1) != 0) || IsGrodnded();
+
+        // Rotats wills
+        wheels[0].localRotation = Quaternion.Lerp(wheels[0].localRotation, Quaternion.Euler(0, 45 * X, 0), Time.deltaTime * 25);
+        wheels[1].localRotation = Quaternion.Lerp(wheels[1].localRotation, Quaternion.Euler(0, 45 * X, 0), Time.deltaTime * 25);
+
 
         if (isGrounded)
         {
             rb.AddForce(transform.forward * deltaAcceleration * Y);
             rb.AddTorque(new Vector3(0f, rotationForce * X, 0f));
+
+            rb.AddForce(-transform.up * rb.linearVelocity.magnitude * downworsForse);
 
             ClampVelocityToForwordDiretion();
         }
