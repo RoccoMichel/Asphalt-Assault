@@ -62,10 +62,6 @@ public class LokolSavingSystem : MonoBehaviour
         }
            
         BoltsSave.SaveClassVariable("Save data " + SceneManager.GetActiveScene().name, SaveFile);
-
-        yield return new WaitForSeconds(5);
-
-        SceneManager.LoadScene(0); // temp
     }
     public void OnFinish() 
     {

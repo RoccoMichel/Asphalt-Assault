@@ -11,6 +11,8 @@ public class FinsenhingScren : MonoBehaviour
 {
     public Transform marcer;
     public GameObject finiseingTimeCard;
+    public GameObject Trofys;
+    public Animation animation;
 
     string timeToTimer(float time) {
 
@@ -20,6 +22,9 @@ public class FinsenhingScren : MonoBehaviour
         return min + ":" + sek + ":" + milSek;
     }
     void Awake() {
+
+        animation.Play();
+
         // we carate a sortedd list of teh best time wher the curent time gand is negativ as a marker
         List<float> times = GM.LevelSaveFile.bestTimes.ToList();
         float newTime = LokolSavingSystem.instens.time;
@@ -40,8 +45,14 @@ public class FinsenhingScren : MonoBehaviour
                 card.GetComponent<Image>().enabled = true;
         }
         finiseingTimeCard.SetActive(false);
+
+        for (int i = 0; i < Trofys.transform.childCount; i++)
+            if (LevelManager.LevTtofys[0][i] > newTime && (i == Trofys.transform.childCount -1 || LevelManager.LevTtofys[0][i+1] < newTime)) 
+                Trofys.transform.GetChild(i).gameObject.SetActive(true);
     }
-    void Update() {
-        
+    public void LodeOpsens(bool maneMenu) {
+        if (maneMenu) SceneManager.LoadScene(0);
+        else SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
     }
 }

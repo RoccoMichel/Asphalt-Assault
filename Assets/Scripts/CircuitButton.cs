@@ -25,11 +25,11 @@ public class CircuitButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         float _betsTime = BoltsSave.LoadClass<SaveFile>("Save data " + levelManager.levels[index].sceneName).bestTimes[0]; // Verey inafisent neds update evesely
         
         if (_betsTime == -1) _betsTime = Mathf.Infinity;
-        float[] _times = levelManager.LevTtofys[i];
+        float[] _times = LevelManager.LevTtofys[i];
         int _bestTrofy = -1;
 
         for (int j = 0; j < _times.Length; j++)
-            if (levelManager.LevTtofys[i][j] > _betsTime)
+            if (LevelManager.LevTtofys[i][j] > _betsTime)
                 _bestTrofy = j;
 
         if (_bestTrofy != -1) {
