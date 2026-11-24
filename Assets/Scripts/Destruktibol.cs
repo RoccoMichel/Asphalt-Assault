@@ -63,12 +63,9 @@ public class Destruktibol : MonoBehaviour
 
                 StartCoroutine(BoltsTimer.WaitFor(() => rbs[index].IsSleeping(), () =>
                 {
-                    StartCoroutine(BoltsTimer.WaitForSeconds(2, () =>
-                    {
-                        rbs[index].isKinematic = true;
-                        colliders[index].enabled = false;
-                        rbs[index].transform.DOMoveY(-5, sedensTillDestroksen);
-                    }));
+                    rbs[index].isKinematic = true;
+                    colliders[index].enabled = false;
+                    rbs[index].transform.DOMoveY(-5, sedensTillDestroksen);
                 }));
             }
 
