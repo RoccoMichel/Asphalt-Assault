@@ -1,9 +1,11 @@
 using BoltsTools;
 using DG.Tweening;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.ProBuilder.MeshOperations;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -46,9 +48,15 @@ public class FinsenhingScren : MonoBehaviour
         }
         finiseingTimeCard.SetActive(false);
 
-        for (int i = 0; i < Trofys.transform.childCount; i++)
-            if (LevelManager.LevTtofys[0][i] > newTime && (i == Trofys.transform.childCount -1 || LevelManager.LevTtofys[0][i+1] < newTime)) 
+        //int curnentIndex = LevelManager.instens.levels.FindIndex(LevelManager.instens.levels.GetType(), l => l.sceneName == SceneManager.GetActiveScene().name);
+        int curnentIndex = Array.FindIndex(
+            LevelManager.instens.levels,
+            l => l.sceneName == SceneManager.GetActiveScene().name);
+         
+        for (int i = 0; i < Trofys.transform.childCount; i++) {
+            if (LevelManager.LevTtofys[curnentIndex][i] > newTime && (i == Trofys.transform.childCount - 1 || LevelManager.LevTtofys[curnentIndex][i + 1] < newTime))
                 Trofys.transform.GetChild(i).gameObject.SetActive(true);
+        }
     }
     public void LodeOpsens(bool maneMenu) {
         if (maneMenu) SceneManager.LoadScene(0);

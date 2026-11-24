@@ -1,4 +1,5 @@
 using BoltsTools;
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
@@ -45,6 +46,7 @@ public class Destruktibol : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         float enery = CulkulateKenetikEnery(other.gameObject.GetComponent<Rigidbody>());
+        float sedensTillDestroksen = 5;
         if (sturtynes < enery)
         {
             Destruksen.Play();
@@ -61,12 +63,16 @@ public class Destruktibol : MonoBehaviour
 
                 StartCoroutine(BoltsTimer.WaitFor(() => rbs[index].IsSleeping(), () =>
                 {
-                    rbs[index].isKinematic = true;
-                    colliders[index].enabled = false;
+                    StartCoroutine(BoltsTimer.WaitForSeconds(2, () =>
+                    {
+                        rbs[index].isKinematic = true;
+                        colliders[index].enabled = false;
+                        rbs[index].transform.DOMoveY(-5, sedensTillDestroksen);
+                    }));
                 }));
             }
 
-            StartCoroutine(BoltsTimer.WaitFor(() => isAllSliping(), () => { DestroyImmediate(gameObject); }));
+            StartCoroutine(BoltsTimer.WaitFor(() => isAllSliping(), () => { StartCoroutine(BoltsTimer.WaitForSeconds(sedensTillDestroksen, () => { DestroyImmediate(gameObject); })); }));
         }
         else {
             col[1].enabled = true;

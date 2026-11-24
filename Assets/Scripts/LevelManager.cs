@@ -38,8 +38,9 @@ public class LevelManager : MonoBehaviour
         {0, new float[]{60*2, 60+45, 60+30, 60+23.8f} },
         {1, new float[]{60*2, 60+45, 60+30, 60+20} }
     };
-    private void Start()
-    {
+    public static LevelManager instens;
+    private void Start() {
+        instens = this;
         GenerateCircuitButtons();
         UppdateTime();
     }
