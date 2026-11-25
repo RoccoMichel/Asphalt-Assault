@@ -5242,7 +5242,7 @@ MonoBehaviour:
   m_DefaultControlScheme: Keybord
   m_DefaultActionMap: Car
   m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 8185451574894718094}
 --- !u!1 &1054468937068806062
 GameObject:
   m_ObjectHideFlags: 0

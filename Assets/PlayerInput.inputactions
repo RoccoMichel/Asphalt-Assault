@@ -37,6 +37,17 @@
             "bindings": [
                 {
                     "name": "",
+                    "id": "c9d2fbb8-d5a2-4e52-8e0f-c71a4b962da3",
+                    "path": "<Keyboard>/rightShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Split-Screen Testing",
+                    "action": "Boost",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "73d838e1-53ac-428d-9ecc-266fee29892b",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -70,7 +81,29 @@
                 },
                 {
                     "name": "positive",
-                    "id": "5f8b76b5-1eee-4d5e-a109-fa40379ed905",
+                    "id": "5c5b8c63-dee8-4f95-a2c8-33c1a37e4ea8",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Split-Screen Testing",
+                    "action": "Move Forword",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "negative",
+                    "id": "6a8ecfab-8714-4ba7-a7a7-03ceaede0e27",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Split-Screen Testing",
+                    "action": "Move Forword",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "b08dfe2f-e386-4af0-a59a-00efc559188c",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
@@ -126,6 +159,28 @@
                 {
                     "name": "positive",
                     "id": "8986e1b7-e1e4-4d31-980b-ad0ed3ab8a44",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Split-Screen Testing",
+                    "action": "Steer",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "negative",
+                    "id": "15a0d938-eae0-486b-af2a-0d4a1cc66591",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Split-Screen Testing",
+                    "action": "Steer",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "ffa9ca82-d720-49b5-9d6e-5596906900ef",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
@@ -136,7 +191,7 @@
                 },
                 {
                     "name": "negative",
-                    "id": "15a0d938-eae0-486b-af2a-0d4a1cc66591",
+                    "id": "7bb675b0-88ff-4a8a-995a-cb352e388305",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
@@ -704,6 +759,17 @@
             "devices": [
                 {
                     "devicePath": "<Gamepad>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "Split-Screen Testing",
+            "bindingGroup": "Split-Screen Testing",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
                     "isOptional": false,
                     "isOR": false
                 }
