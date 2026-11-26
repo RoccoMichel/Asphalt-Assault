@@ -17400,6 +17400,10 @@ PrefabInstance:
       propertyPath: m_Parameters.widthMultiplier
       value: 0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 2184715132818126737, guid: 77c49c00139e2fb49bfe6a40557c219a, type: 3}
+      propertyPath: m_Parameters.numCornerVertices
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2444460954140581473, guid: 77c49c00139e2fb49bfe6a40557c219a, type: 3}
       propertyPath: m_Name
       value: mINIMAP
