@@ -33,8 +33,10 @@ public class RoadMaker : MonoBehaviour
     
     Mesh mesh;
 
+    public static RoadMaker instes;
     void Awake()
     {
+        instes = this;
         splineContainer = GetComponent<SplineContainer>();
     }
 
