@@ -43,19 +43,43 @@ public class UIMInimap : MonoBehaviour
             prev = next;
         }
     }
-
     Vector3 MovePontToCamra(Vector3 pont, Vector3 center, float radios, Camera cam) {
-        Vector3 lokolPont = pont - center;
+
+        Vector3 f = Camera.main.transform.forward;
+        f.y = 0f;
+        float ang = f.sqrMagnitude > 0.0001f ? Mathf.Atan2(f.x, f.z) : 0f;  
+        Vector3 lokolPont = RotatePont(pont - center, -ang);
+
         lokolPont = cam.transform.localToWorldMatrix.MultiplyVector(new Vector3(lokolPont.x, lokolPont.z, 0));
         Vector2 MapCecter = MinimapBacrond.position;
 
-        float screenRadius = cam.orthographicSize * 0.35f;      // world units
+        float screenRadius = cam.orthographicSize * 0.35f;      
         float scalfaktor = screenRadius / radios;
-        pont = lokolPont * scalfaktor + cam.ScreenToWorldPoint(MapCecter);
+
+        Vector3 offset = lokolPont * scalfaktor;
+
+        RectTransform rt = (RectTransform)MinimapBacrond;
+        float pxRadius = rt.rect.width * 0.5f * rt.lossyScale.x;
+        float worldPerPixel = 2f * cam.orthographicSize / Screen.height;
+        float maxRadius = pxRadius * worldPerPixel;
+
+        offset = Vector3.ClampMagnitude(offset, maxRadius);
+
+        pont = offset + cam.ScreenToWorldPoint(MapCecter);
 
         return pont + cam.transform.forward;
     }
-  
+
+    Vector3 RotatePont(Vector3 pont, float ang)   
+    {
+        float c = Mathf.Cos(ang);
+        float s = Mathf.Sin(ang);
+
+        return new Vector3(
+            pont.x * c + pont.z * s,
+            pont.y,
+            -pont.x * s + pont.z * c);
+    }
     void Update() {
         Vector3 pl = GM.carPonters[0].rb.position;
         int cont = lineRenderer.positionCount;
@@ -72,6 +96,8 @@ public class UIMInimap : MonoBehaviour
         float radios = FindRadios(center, pont);
 
         DrawDebugCircle(center, radios, 50);
+
+       
 
         if (!Input.GetKey(KeyCode.Tab)) center = pl;
         for (int i = 0; i < cont; i++)

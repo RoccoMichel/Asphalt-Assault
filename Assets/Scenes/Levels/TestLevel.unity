@@ -11922,9 +11922,33 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4250819237467728902, guid: eafd240c826a2e441812518cb7ae70fd, type: 3}
+      propertyPath: m_Positions.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250819237467728902, guid: eafd240c826a2e441812518cb7ae70fd, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: -876546973899608171, guid: 618e533613d2ef34eaa801a555acab75, type: 3}
+    - target: {fileID: 4250819237467728902, guid: eafd240c826a2e441812518cb7ae70fd, type: 3}
+      propertyPath: m_Positions.Array.data[1].x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250819237467728902, guid: eafd240c826a2e441812518cb7ae70fd, type: 3}
+      propertyPath: m_Positions.Array.data[1].y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250819237467728902, guid: eafd240c826a2e441812518cb7ae70fd, type: 3}
+      propertyPath: m_Positions.Array.data[2].x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250819237467728902, guid: eafd240c826a2e441812518cb7ae70fd, type: 3}
+      propertyPath: m_Positions.Array.data[2].y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250819237467728902, guid: eafd240c826a2e441812518cb7ae70fd, type: 3}
+      propertyPath: m_Positions.Array.data[2].z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4250819237467728902, guid: eafd240c826a2e441812518cb7ae70fd, type: 3}
       propertyPath: m_Parameters.numCornerVertices
       value: 2

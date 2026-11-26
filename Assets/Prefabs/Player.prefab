@@ -17392,6 +17392,14 @@ PrefabInstance:
       propertyPath: MinimapBacrond
       value: 
       objectReference: {fileID: 4237120290932848021}
+    - target: {fileID: 2184715132818126737, guid: 77c49c00139e2fb49bfe6a40557c219a, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 618e533613d2ef34eaa801a555acab75, type: 3}
+    - target: {fileID: 2184715132818126737, guid: 77c49c00139e2fb49bfe6a40557c219a, type: 3}
+      propertyPath: m_Parameters.widthMultiplier
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 2444460954140581473, guid: 77c49c00139e2fb49bfe6a40557c219a, type: 3}
       propertyPath: m_Name
       value: mINIMAP
